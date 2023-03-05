@@ -1,0 +1,67 @@
+@page "/Login"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject LoginService LoginService
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            p {color: red;}
+        </style>
+    </head>
+    <body>
+        <div class="container mt-3">
+            @if (msgInvalido == true)
+            {
+                <p>Usuário ou senha incorreta</p>
+            }
+
+            <label for="Username">Usuário: </label>
+            <input type="text" class="form-control w-25" @bind="username" id="Username" name="Username"> <br>
+
+            <label for="Password">Senha: </label>
+            <input type="password" class="form-control w-25" @bind="password" id="Password" name="Password"> <br><br>
+
+            <button type="button" class="btn btn-primary" @onclick="ValidarLogin">Logar</button>
+        </div>
+    </body>
+</html>
+
+@code
+{
+    // Variáveis ----------------------------------------------------------------------------------------------------------------------
+    private string? username;
+    private string? password;
+    private bool msgInvalido = false;
+
+    // Lista para armazenar os Usuários salvos no banco de dados ----------------------------------------------------------------------
+    public List<User>? users { get; set; } = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<User>?>("user");
+    }
+
+    // Operações ----------------------------------------------------------------------------------------------------------------------
+    private void ValidarLogin()
+    {
+        foreach (var _user in users)
+        {
+            if(_user.Username == username && _user.Password == password)
+            {
+                LoginService.Id = _user.Id;
+                LoginService.User = username;
+                LoginService.Password = password;
+                LoginService.Logado = true;
+                Navigation.NavigateTo("/Home");
+            }
+            
+            else
+            {
+                msgInvalido = true;
+            }
+        }
+    }
+}

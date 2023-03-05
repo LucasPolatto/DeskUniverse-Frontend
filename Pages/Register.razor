@@ -1,0 +1,148 @@
+@page "/Register"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject LoginService LoginService
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            p {color: red;}
+        </style>
+    </head>
+    <body>
+        <div class="container mt-3">
+            @if (msgUserAR == true)
+            {
+                <p>Usuário já registrado</p>
+            }
+            @if (msgPasswordsNM == true)
+            {
+                <p>As senhas precisam ser iguais</p>
+            }
+            @if (msgEmptyF == true)
+            {
+                <p>Preencha todos os campos</p>
+            }
+
+            <label for="Username">Nome de Usuário: </label>
+            <input type="text" class="form-control w-25" @bind="username" id="Username" name="Username"> <br>
+
+            <label for="Password">Senha: </label>
+            <input type="password" class="form-control w-25" @bind="password" id="Password" name="Password"> <br><br>
+
+            <label for="confirmPassword">Confirmar Senha: </label>
+            <input type="password" class="form-control w-25" @bind="confirmPassword" id="confirmPassword" name="confirmPassword"> <br><br>
+
+            <button type="button" class="btn btn-primary" @onclick="ValidarRegistro">Registrar-se</button>
+        </div>
+    </body>
+</html>
+
+@code
+{
+    // Variáveis ----------------------------------------------------------------------------------------------------------------------
+    private string username;
+    private string password;
+    private string confirmPassword;
+    private bool msgUserAR = false;
+    private bool msgPasswordsNM = false;
+    private bool msgEmptyF = false;
+    public User newUser = new User();
+
+    // Lista para armazenar os Usuários salvos no banco de dados ----------------------------------------------------------------------
+    public List<User>? users { get; set; } = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<User>?>("user");
+    }
+
+    // Operações ----------------------------------------------------------------------------------------------------------------------
+    private void ValidarRegistro()
+    {
+        msgUserAR = false;
+        msgPasswordsNM = false;
+        msgEmptyF = false;
+
+        msgEmptyF = FieldCheck();
+
+        if(msgEmptyF == false)
+        {  
+            msgUserAR = ValidarUsuario();
+            
+            if(msgUserAR == false)
+            {
+                msgPasswordsNM = ValidarSenha();
+
+                if(msgPasswordsNM == false)
+                {
+                    newUser.Username = username;
+                    newUser.Password = password;
+                    Http.PostAsJsonAsync<User>("user", newUser);
+                    Navigation.NavigateTo("/Login");
+                }
+            }
+        }
+    }
+
+    // Verifica se alguns dos campos não foi preenchido -------------------------------------------------------------------------------
+    private bool FieldCheck()
+    {
+        if(username != null && password != null && confirmPassword != null)
+        {
+            if(username != "" && password != "" && confirmPassword != "")
+            {
+                msgEmptyF = false;
+            }
+
+            else
+            {
+                msgEmptyF = true;
+            }
+        }
+
+        else
+        {
+            msgEmptyF = true;
+        }
+
+        return(msgEmptyF);
+    }
+    
+    // Verifica se o usuário já existe ------------------------------------------------------------------------------------------------
+    private bool ValidarUsuario()
+    {
+        foreach (var _user in users)
+        {
+            if(_user.Username == username)
+            {
+                msgUserAR = true;
+            }
+            
+            else
+            {
+                msgUserAR = false;
+            }
+        }
+
+        return(msgUserAR);
+    }
+    
+    // Verifica se as senhas são iguais -----------------------------------------------------------------------------------------------
+    private bool ValidarSenha()
+    {
+        if(password == confirmPassword)
+        {
+            msgPasswordsNM = false;
+        }
+        
+        else
+        {
+            msgPasswordsNM = true;
+        }
+
+        return(msgPasswordsNM);
+    }
+}
