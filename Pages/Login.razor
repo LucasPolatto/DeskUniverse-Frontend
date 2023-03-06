@@ -44,7 +44,7 @@
         users = await Http.GetFromJsonAsync<List<User>?>("user");
     }
 
-    // Operações ----------------------------------------------------------------------------------------------------------------------
+    // Valida e login e salva os dados para serem usados depois -----------------------------------------------------------------------
     private void ValidarLogin()
     {
         foreach (var _user in users)
