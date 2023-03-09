@@ -1,0 +1,204 @@
+@page "/Home"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject UserService UserService
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Document</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        @if (UserService.Logado == true)
+        {
+            <div class="body">
+
+                <section class="container">
+                    <div class="row">
+
+                        <!-- Card das campanhas -->
+                        <div class="card col" style="width: 18rem;">
+                            <a data-bs-toggle="modal" data-bs-target="#Campaigns">
+                                <img src="/img/skill.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">Campanhas</h5>
+                                    <p class="card-text">Gerencie suas campanhas</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Modal de exibição campanhas-->
+                        <div class="modal fade" id="Campaigns" tabindex="-1" aria-labelledby="CampaignsLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignsLabel">Campanhas</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Mestre</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <th scope="col">Hora da sessão</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _campaign in campaigns)
+                                                {
+                                                    @if (_campaign.UserId == UserService.Id)
+                                                    {
+                                                        <tr>
+                                                            <td>@IdForUsername(_campaign.UserId)</td>
+                                                            <td>@_campaign.Name</td>
+                                                            <td>@_campaign.SessionDate</td>
+                                                            <td>@_campaign.SessionHour</td>
+                                                            <td>
+                                                                <button class="btn btn-primary">Visualizar</button>
+                                                                <button class="btn btn-success">Editar</button>
+                                                                <button class="btn btn-danger">Deletar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card dos personagens -->
+                        <div class="card col" style="width: 18rem;">
+                            <a data-bs-toggle="modal" data-bs-target="#Characters">
+                                <img src="/img/personagem.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">personagens</h5>
+                                    <p class="card-text">Gerencie seus personagens</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Modal de exibição campanhas-->
+                        <div class="modal fade" id="Characters" tabindex="-1" aria-labelledby="CharactersLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharactersLabel">personagens</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Gênero</th>
+                                                    <th scope="col">Raça</th>
+                                                    <th scope="col">Classe</th>
+                                                    <th scope="col">Nível</th>
+                                                    <th scope="col">Campanha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _character in characters)
+                                                {
+                                                    @if (_character.UserId == UserService.Id)
+                                                    {
+                                                        <tr>
+                                                            <td>@_character.Id</td>
+                                                            <td>@_character.Name</td>
+                                                            <td>@_character.Gender</td>
+                                                            <td>@_character.Race</td>
+                                                            <td>@_character.Class</td>
+                                                            <td>@_character.Level</td>
+                                                            <td>@IdForCampaignname(_character.CampaignId)</td>
+                                                            <td>
+                                                                <button class="btn btn-primary">Visualizar</button>
+                                                                <button class="btn btn-success">Editar</button>
+                                                                <button class="btn btn-danger">Deletar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Sem uso atualmente -->
+                    <div class="row">
+
+                    </div>
+
+                </section>
+
+            </div>
+            
+        }
+        else{Navigation.NavigateTo("/Login");}
+    </body>
+</html>
+
+@code
+{
+    // Salva todos os dados das tabelas do banco em listas ----------------------------------------------------------------------------
+    public List<User>? users { get; set; } = new List<User>();
+    public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
+    public List<Character>? characters { get; set; } = new List<Character>();
+    public List<Skill>? skills { get; set; } = new List<Skill>();
+    public List<Item>? itens { get; set; } = new List<Item>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<User>?>("user");
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+        skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
+        itens = await Http.GetFromJsonAsync<List<Item>?>("item");
+    }
+
+    // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
+    public string? username;
+    public string IdForUsername(int Id)
+    {
+        foreach(var _user in users)
+        {
+            if(Id == _user.Id)
+            {
+                username = _user.Username;
+            }
+        }
+
+        return(username);
+    }
+
+    // Recebe o ID da campanha e devolve seu nome -------------------------------------------------------------------------------------
+    public string? campaignname;
+    public string IdForCampaignname(int? Id)
+    {
+        foreach(var _campaign in campaigns)
+        {
+            if(Id == _campaign.Id)
+            {
+                campaignname = _campaign.Name;
+            }
+        }
+
+        return(campaignname);
+
+    }
+}

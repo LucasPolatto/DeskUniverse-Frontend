@@ -2,7 +2,7 @@
 @inject NavigationManager Navigation
 @inject HttpClient Http
 @using DeskUniverse_Frontend.Models
-@inject LoginService LoginService
+@inject UserService UserService
 
 <!DOCTYPE html>
 <html>
@@ -12,19 +12,28 @@
         </style>
     </head>
     <body>
-        <div class="container mt-3">
-            @if (msgInvalido == true)
-            {
-                <p>Usuário ou senha incorreta</p>
-            }
+        <div class="body">
+            <div class="container">
+            <div class="row">
+                <div class="login">
+                    <div class="card" style="width: 18rem;">
+                        @if (msgInvalido == true)
+                        {
+                            <p>Usuário ou senha incorreta</p>
+                        }
 
-            <label for="Username">Usuário: </label>
-            <input type="text" class="form-control w-25" @bind="username" id="Username" name="Username"> <br>
+                        <label for="Username">Usuário: </label>
+                        <input type="text" class="form-control" @bind="username" id="Username" name="Username"> <br>
 
-            <label for="Password">Senha: </label>
-            <input type="password" class="form-control w-25" @bind="password" id="Password" name="Password"> <br><br>
+                        <label for="Password">Senha: </label>
+                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> <br><br>
 
-            <button type="button" class="btn btn-primary" @onclick="ValidarLogin">Logar</button>
+                        <button type="button" class="btn btn-primary" @onclick="ValidarLogin">Logar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         </div>
     </body>
 </html>
@@ -51,10 +60,10 @@
         {
             if(_user.Username == username && _user.Password == password)
             {
-                LoginService.Id = _user.Id;
-                LoginService.User = username;
-                LoginService.Password = password;
-                LoginService.Logado = true;
+                UserService.Id = _user.Id;
+                UserService.Username = username;
+                UserService.Password = password;
+                UserService.Logado = true;
                 Navigation.NavigateTo("/Home");
             }
             

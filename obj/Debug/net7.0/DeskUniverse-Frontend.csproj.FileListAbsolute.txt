@@ -817,9 +817,7 @@ C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\staticwebassets.pack.json
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\staticwebassets.development.json
-C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\scopedcss\bundle\DeskUniverse-Frontend.styles.css
-C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\scopedcss\projectbundle\DeskUniverse-Frontend.bundle.scp.css
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\DeskUniverse-Frontend.csproj.CopyComplete
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\DeskUniverse-Frontend.dll
 C:\Users\lucas\OneDrive\Documentos\GitHub\DeskUniverse-Frontend\obj\Debug\net7.0\refint\DeskUniverse-Frontend.dll
