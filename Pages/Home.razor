@@ -30,7 +30,7 @@
                             </a>
                         </div>
 
-                        <!-- Modal de exibição campanhas-->
+                        <!-- Modal de exibição de campanhas-->
                         <div class="modal fade" id="Campaigns" tabindex="-1" aria-labelledby="CampaignsLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-xl ">
@@ -86,7 +86,7 @@
                             </a>
                         </div>
 
-                        <!-- Modal de exibição campanhas-->
+                        <!-- Modal de exibição de personagens-->
                         <div class="modal fade" id="Characters" tabindex="-1" aria-labelledby="CharactersLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-xl ">
@@ -124,14 +124,36 @@
                                                             <td>@IdForCampaignname(_character.CampaignId)</td>
                                                             <td>
                                                                 <button class="btn btn-primary">Visualizar</button>
-                                                                <button class="btn btn-success">Editar</button>
-                                                                <button class="btn btn-danger">Deletar</button>
+
+                                                                <!-- Botão de Delete de personagem -->
+                                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CharacterDelete" @onclick="(() => SaveIdForDelete(_character.Id))">Deletar</button>
                                                             </td>
                                                         </tr>
                                                     }
                                                 }
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de personagem-->
+                        <div class="modal fade" id="CharacterDelete" tabindex="-1" aria-labelledby="CharacterDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterDeleteLabel">Deletar personagem?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Um personagem deletado não pode ser restaurado! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteCharacter(IdForDelete))">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
@@ -200,5 +222,25 @@
 
         return(campaignname);
 
+    }
+
+    // Funções para realizar a operação de Delete -------------------------------------------------------------------------------------
+    public int IdForDelete;
+
+    public void SaveIdForDelete(int id)
+    {
+        IdForDelete = id;
+    }
+    
+    public void DeleteCharacter(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"character/{id}");
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteCampaign(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"campaign/{id}");
+        Navigation.NavigateTo("/");
     }
 }

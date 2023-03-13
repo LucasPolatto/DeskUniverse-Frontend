@@ -79,6 +79,8 @@ nav .container-fluid {
     padding: 3px;
 }
 
+/* SEM UNITILIDADE NO MOMENTO
+
 #exampleModalMap .modal-dialog {
     display: flex;
     align-items: center;
@@ -88,6 +90,8 @@ nav .container-fluid {
 #exampleModalMap .modal-dialog img {
     height: 80vh;
 }
+
+*/
 
 .navbar-brand:focus,
 .navbar-brand:hover {
@@ -102,12 +106,30 @@ nav .container-fluid {
 
 .login .card{
     background: rgba( 44, 44, 44, 0.25 );
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
-border: 1px solid rgba( 255, 255, 255, 0.18 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
 .login label {
+    color: white;
+}
+
+.register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register .card{
+    background: rgba( 44, 44, 44, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.register label {
     color: white;
 }

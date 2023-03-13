@@ -8,34 +8,42 @@
     <head>
         <style>
             p {color: red;}
-            label {color: white;}
         </style>
     </head>
     <body>
-        <div class="container mt-3">
-            @if (msgUserAR == true)
-            {
-                <p>Usuário já registrado</p>
-            }
-            @if (msgPasswordsNM == true)
-            {
-                <p>As senhas precisam ser iguais</p>
-            }
-            @if (msgEmptyF == true)
-            {
-                <p>Preencha todos os campos</p>
-            }
+        <div class="body">
+            <div class="container">
+            <div class="row">
+                <div class="register">
+                    <div class="card" style="width: 18rem;">
+                        @if (msgUserAR == true)
+                        {
+                            <p>Usuário já registrado</p>
+                        }
+                        @if (msgPasswordsNM == true)
+                        {
+                            <p>As senhas precisam ser iguais</p>
+                        }
+                        @if (msgEmptyF == true)
+                        {
+                            <p>Preencha todos os campos</p>
+                        }
 
-            <label for="Username">Nome de Usuário: </label>
-            <input type="text" class="form-control w-25" @bind="username" id="Username" name="Username"> <br>
+                        <label for="Username">Nome de Usuário: </label>
+                        <input type="text" class="form-control" @bind="username" id="Username" name="Username"> <br>
 
-            <label for="Password">Senha: </label>
-            <input type="password" class="form-control w-25" @bind="password" id="Password" name="Password"> <br><br>
+                        <label for="Password">Senha: </label>
+                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> <br><br>
 
-            <label for="confirmPassword">Confirmar Senha: </label>
-            <input type="password" class="form-control w-25" @bind="confirmPassword" id="confirmPassword" name="confirmPassword"> <br><br>
+                        <label for="confirmPassword">Confirmar Senha: </label>
+                        <input type="password" class="form-control" @bind="confirmPassword" id="confirmPassword" name="confirmPassword"> <br><br>
 
-            <button type="button" class="btn btn-primary" @onclick="ValidarRegistro">Registrar-se</button>
+                        <button type="button" class="btn btn-primary" @onclick="ValidarRegistro">Registrar-se</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         </div>
     </body>
 </html>
