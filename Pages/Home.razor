@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @using DeskUniverse_Frontend.Models
 @inject UserService UserService
+@inject CharacterService CharacterService
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +31,7 @@
                             </a>
                         </div>
 
-                        <!-- Modal de exibição de campanhas-->
+                        <!-- Modal de exibição resumida de campanhas-->
                         <div class="modal fade" id="Campaigns" tabindex="-1" aria-labelledby="CampaignsLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-xl ">
@@ -56,20 +57,42 @@
                                                     @if (_campaign.UserId == UserService.Id)
                                                     {
                                                         <tr>
-                                                            <td>@IdForUsername(_campaign.UserId)</td>
+                                                            <td>@IdForUserName(_campaign.UserId)</td>
                                                             <td>@_campaign.Name</td>
                                                             <td>@_campaign.SessionDate</td>
                                                             <td>@_campaign.SessionHour</td>
                                                             <td>
                                                                 <button class="btn btn-primary">Visualizar</button>
-                                                                <button class="btn btn-success">Editar</button>
-                                                                <button class="btn btn-danger">Deletar</button>
+
+                                                                <!-- Botão de Delete de campanha -->
+                                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CampaignDelete" @onclick="(() => SaveIdForDelete(_campaign.Id))">Deletar</button>
                                                             </td>
                                                         </tr>
                                                     }
                                                 }
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de campanha-->
+                        <div class="modal fade" id="CampaignDelete" tabindex="-1" aria-labelledby="CampaignDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignDeleteLabel">Deletar campanha?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Uma campanha deletada não pode ser restaurada! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Campaigns">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteCampaign(IdForDelete))">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
@@ -86,13 +109,13 @@
                             </a>
                         </div>
 
-                        <!-- Modal de exibição de personagens-->
+                        <!-- Modal de exibição resumida de personagens-->
                         <div class="modal fade" id="Characters" tabindex="-1" aria-labelledby="CharactersLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-xl ">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="CharactersLabel">personagens</h1>
+                                        <h1 class="modal-title fs-5" id="CharactersLabel">Personagens</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
@@ -121,9 +144,9 @@
                                                             <td>@_character.Race</td>
                                                             <td>@_character.Class</td>
                                                             <td>@_character.Level</td>
-                                                            <td>@IdForCampaignname(_character.CampaignId)</td>
+                                                            <td>@IdForCampaignName(_character.CampaignId)</td>
                                                             <td>
-                                                                <button class="btn btn-primary">Visualizar</button>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterView" @onclick="(() => CharacterService.CharacterSave(_character))">Visualizar</button>
 
                                                                 <!-- Botão de Delete de personagem -->
                                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CharacterDelete" @onclick="(() => SaveIdForDelete(_character.Id))">Deletar</button>
@@ -132,6 +155,122 @@
                                                     }
                                                 }
                                             </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de personagens-->
+                        <div class="modal fade" id="CharacterView" tabindex="-1" aria-labelledby="CharacterViewLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterViewLabel">Ficha de Personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Jogador</th>
+                                                    <td style="width: 15%;">@IdForUserName(CharacterService.CharacterData.UserId)</td>
+                                                    <th scope="col" style="width: 10%;">Campanha</th>
+                                                    <td>@IdForCampaignName(CharacterService.CharacterData.CampaignId)</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">IDENTIFICAÇÃO DO PERSONAGEM</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Nome</th>
+                                                    <td>@CharacterService.CharacterData.Name</td>
+                                                    <th scope="col">Raça</th>
+                                                    <td>@CharacterService.CharacterData.Race</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Gênero</th>
+                                                    <td>@CharacterService.CharacterData.Gender</td>
+                                                    <th scope="col">Idade</th>
+                                                    <td>@CharacterService.CharacterData.Age</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Classe</th>
+                                                    <td>@CharacterService.CharacterData.Class</td>
+                                                    <th scope="col">Nível</th>
+                                                    <td>@CharacterService.CharacterData.Level</td>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Descrição</th>
+                                                    <td colspan="3">@CharacterService.CharacterData.Description</td>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">História</th>
+                                                    <td colspan="3">@CharacterService.CharacterData.History</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">ESTATÍSTICAS</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">HP / MP</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Vida</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.Health</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Mana</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.Mana</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">RESISTÊNCIAS</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Defesa Física</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.PD</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Defesa Mágica</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.MD</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">STATUS</th>
+                                                    <th scope="col" style="text-align: center;">MODIFICADOR</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Força</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.STR</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Destreza</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.DEX</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Constituição</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.CON</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Inteligência</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.INT</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Sabedoria</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.WIS</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Vontade</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.WIL</td>
+                                                </tr>
+                                            </thead>
                                         </table>
                                     </div>
                                 </div>
@@ -195,7 +334,7 @@
 
     // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
     public string? username;
-    public string IdForUsername(int Id)
+    public string IdForUserName(int Id)
     {
         foreach(var _user in users)
         {
@@ -210,7 +349,7 @@
 
     // Recebe o ID da campanha e devolve seu nome -------------------------------------------------------------------------------------
     public string? campaignname;
-    public string IdForCampaignname(int? Id)
+    public string IdForCampaignName(int? Id)
     {
         foreach(var _campaign in campaigns)
         {

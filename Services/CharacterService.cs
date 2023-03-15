@@ -4,13 +4,8 @@ public class CharacterService
 {
     public Character CharacterData { get; set; } = new Character();
 
-    public void CharacterSave(Character Data)
+    public void CharacterSave(Character _Character)
     {
-        CharacterData = Data;
-    }
-
-    public Character CharacterLoad()
-    {
-        return(CharacterData);
+        CharacterData = _Character;
     }
 }
