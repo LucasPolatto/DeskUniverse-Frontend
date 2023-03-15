@@ -4,6 +4,7 @@
 @using DeskUniverse_Frontend.Models
 @inject UserService UserService
 @inject CharacterService CharacterService
+@inject CampaignService CampaignService
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,10 +63,73 @@
                                                             <td>@_campaign.SessionDate</td>
                                                             <td>@_campaign.SessionHour</td>
                                                             <td>
-                                                                <button class="btn btn-primary">Visualizar</button>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignView" @onclick="(() => CampaignService.CampaignSave(_campaign))">Visualizar</button>
 
                                                                 <!-- Botão de Delete de campanha -->
                                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CampaignDelete" @onclick="(() => SaveIdForDelete(_campaign.Id))">Deletar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de campanha-->
+                        <div class="modal fade" id="CampaignView" tabindex="-1" aria-labelledby="CampaignViewLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignViewLabel">Campanha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Mestre</th>
+                                                    <td style="width: 15%;">@IdForUserName(CampaignService.CampaignData.UserId)</td>
+                                                    <th scope="col" style="width: 10%;">Campanha</th>
+                                                    <td>@IdForCampaignName(CampaignService.CampaignData.Id)</td>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <td>@CampaignService.CampaignData.SessionDate</td>
+                                                    <th scope="col">Horário</th>
+                                                    <td>@CampaignService.CampaignData.SessionHour</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">PARTICIPANTES</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Jogador</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Gênero</th>
+                                                    <th scope="col">Raça</th>
+                                                    <th scope="col">Classe</th>
+                                                    <th scope="col">Nível</th>
+                                                    <th scope="col">Opção</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _character in characters)
+                                                {
+                                                    if (_character.CampaignId == CampaignService.CampaignData.Id)
+                                                    {
+                                                        <tr>
+                                                            <td  style="width: 15%;">@IdForUserName(_character.UserId)</td>
+                                                            <td  style="width: 15%;">@_character.Name</td>
+                                                            <td  style="width: 15%;">@_character.Gender</td>
+                                                            <td  style="width: 15%;">@_character.Race</td>
+                                                            <td  style="width: 15%;">@_character.Class</td>
+                                                            <td  style="width: 15%;">@_character.Level</td>
+                                                            <td>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterView" @onclick="(() => CharacterService.CharacterSave(_character))">Visualizar</button>
                                                             </td>
                                                         </tr>
                                                     }
@@ -161,7 +225,7 @@
                             </div>
                         </div>
 
-                        <!-- Modal de exibição de personagens-->
+                        <!-- Modal de exibição de personagem-->
                         <div class="modal fade" id="CharacterView" tabindex="-1" aria-labelledby="CharacterViewLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-xl ">
@@ -325,6 +389,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        CharacterService.CharacterData = new Character();
+        CampaignService.CampaignData = new Campaign();
         users = await Http.GetFromJsonAsync<List<User>?>("user");
         campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
         characters = await Http.GetFromJsonAsync<List<Character>?>("character");
@@ -336,6 +402,8 @@
     public string? username;
     public string IdForUserName(int Id)
     {
+        username = null;
+        
         foreach(var _user in users)
         {
             if(Id == _user.Id)
@@ -351,6 +419,8 @@
     public string? campaignname;
     public string IdForCampaignName(int? Id)
     {
+        campaignname = null;
+
         foreach(var _campaign in campaigns)
         {
             if(Id == _campaign.Id)
