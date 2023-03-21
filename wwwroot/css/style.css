@@ -79,20 +79,6 @@ nav .container-fluid {
     padding: 3px;
 }
 
-/* SEM UNITILIDADE NO MOMENTO
-
-#exampleModalMap .modal-dialog {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#exampleModalMap .modal-dialog img {
-    height: 80vh;
-}
-
-*/
-
 .navbar-brand:focus,
 .navbar-brand:hover {
     color: white !important;

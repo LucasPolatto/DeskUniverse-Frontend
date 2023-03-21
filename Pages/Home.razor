@@ -184,6 +184,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterCreate" @onclick="ResetCharacterData">Criar personagem</button>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -220,6 +221,90 @@
                                                 }
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de personagens-->
+                        <div class="modal fade" id="CharacterCreate" tabindex="-1" aria-labelledby="CharacterCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterCreateLabel">Criação de Personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Identificação do Personagem</h5> <br>
+
+                                        <label for="charcampaignId">Id da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
+
+                                        <label for="charname">Nome do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Name" id="charname" name="charname"> <br>
+
+                                        <label for="charrace">Raça: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Race" id="charrace" name="charrace"> <br>
+
+                                        <label for="chargender">Gênero: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Gender" id="chargender" name="chargender"> <br>
+
+                                        <label for="charage">Idade: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Age" id="charage" name="charage"> <br>
+
+                                        <label for="charclass">Classe: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Class" id="charclass" name="charclass"> <br>
+
+                                        <label for="chardescription">Descrição do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Description" id="chardescription" name="chardescription"> <br>
+
+                                        <label for="charhistory">História do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.History" id="charhistory" name="charhistory"> <br><br>
+                                        
+                                        
+                                        <h5>Estatísticas do Personagem</h5> <br>
+
+                                        <label for="charlevel">Nível: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Level" id="charlevel" name="charlevel"> <br><br>
+
+                                        <label for="charhealth">Vida: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Health" id="charhealth" name="charhealth"> <br>
+
+                                        <label for="charmana">Mana: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Mana" id="charmana" name="charmana"> <br><br>
+
+                                        <label for="charPD">Defesa Física: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.PD" id="charPD" name="charPD"> <br>
+
+                                        <label for="charMD">Defesa Mágica: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.MD" id="charMD" name="charMD"> <br><br>
+
+                                        <label for="charSTR">STR: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.STR" id="charSTR" name="charSTR"> <br>
+
+                                        <label for="charDEX">DEX: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.DEX" id="charDEX" name="charDEX"> <br>
+
+                                        <label for="charCON">CON: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CON" id="charCON" name="charCON"> <br>
+
+                                        <label for="charINT">INT: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.INT" id="charINT" name="charINT"> <br>
+
+                                        <label for="charWIS">WIS: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIS" id="charWIS" name="charWIS"> <br>
+
+                                        <label for="charCHA">CHA: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CHA" id="charCHA" name="charCHA"> <br>
+
+                                        <label for="charWIL">WIL: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIL" id="charWIL" name="charWIL"> <br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Characters" @onclick="CreateCharacter">Concluir</button>
                                     </div>
                                 </div>
                             </div>
@@ -331,6 +416,10 @@
                                                     <td style="text-align: center;">@CharacterService.CharacterData.WIS</td>
                                                 </tr>
                                                 <tr>
+                                                    <th scope="col">Carisma</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.CHA</td>
+                                                </tr>
+                                                <tr>
                                                     <th scope="col">Vontade</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.WIL</td>
                                                 </tr>
@@ -431,6 +520,19 @@
 
         return(campaignname);
 
+    }
+
+    //Função para resetar os dados de CharacterService.CharacterData ------------------------------------------------------------------
+    public void ResetCharacterData()
+    {
+        CharacterService.CharacterData = new Character();
+    }
+
+    // Função para realizar a operação de Create (Post) -------------------------------------------------------------------------------
+    public void CreateCharacter()
+    {
+        CharacterService.CharacterData.UserId = UserService.Id;
+        Http.PostAsJsonAsync<Character>("character", CharacterService.CharacterData);
     }
 
     // Funções para realizar a operação de Delete -------------------------------------------------------------------------------------
