@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DxNfKu2S96DcX09t6wgnlv07Iq9c05CLboZIeL7QPdo=",
+  "Hash": "Zjedj9Wh42RMuEhUVwhSwQlOzi1HqIKKCzcbBfDCRg4=",
   "Source": "DeskUniverse-Frontend",
   "BasePath": "/",
   "Mode": "Root",
@@ -7106,23 +7106,6 @@
       "OriginalItemSpec": "wwwroot\\icon-192.png"
     },
     {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\axe.jpg",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "img/axe.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\axe.jpg"
-    },
-    {
       "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\fundo1.jpg",
       "SourceId": "DeskUniverse-Frontend",
       "SourceType": "Discovered",
@@ -7155,23 +7138,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\map.png"
-    },
-    {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\mapa1.jpg",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "img/mapa1.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\mapa1.jpg"
     },
     {
       "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\personagem.jpg",
@@ -7223,23 +7189,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
-    },
-    {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\sample-data\\weather.json",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "sample-data/weather.json",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\sample-data\\weather.json"
     }
   ]
 }

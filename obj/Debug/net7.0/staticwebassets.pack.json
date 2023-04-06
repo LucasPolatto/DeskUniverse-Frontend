@@ -65,20 +65,12 @@
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\axe.jpg",
-      "PackagePath": "staticwebassets\\img\\axe.jpg"
-    },
-    {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\fundo1.jpg",
       "PackagePath": "staticwebassets\\img\\fundo1.jpg"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\map.png",
       "PackagePath": "staticwebassets\\img\\map.png"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\mapa1.jpg",
-      "PackagePath": "staticwebassets\\img\\mapa1.jpg"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\personagem.jpg",
@@ -91,10 +83,6 @@
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\sample-data\\weather.json",
-      "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },
     {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.DeskUniverse-Frontend.Microsoft.AspNetCore.StaticWebAssets.props",

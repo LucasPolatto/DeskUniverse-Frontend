@@ -46,6 +46,11 @@
                                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignCreate" @onclick="ResetCampaignData">Criar campanha</button>
                                         <table class="table">
                                             <thead>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col" colspan="4">Minhas Campanhas</th>
+                                                </tr>
+                                                <br>
                                                 <tr>
                                                     <th scope="col">Id</th>
                                                     <th scope="col">Mestre</th>
@@ -75,6 +80,41 @@
                                                     }
                                                 }
                                             </tbody>
+                                            <tfoot>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4">Campanhas que Participo</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Mestre</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Personagem</th>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <th scope="col">Hora da sessão</th>
+                                                </tr>
+                                                <tr>
+                                                    @foreach (var _character in characters)
+                                                    {
+                                                        if (_character.UserId == UserService.Id)
+                                                        {
+                                                            foreach (var _campaign in campaigns)
+                                                            {
+                                                                if (_campaign.Id == _character.CampaignId)
+                                                                {
+                                                                    <td>@_campaign.Id</td>
+                                                                    <td>@IdForUserName(_campaign.UserId)</td>
+                                                                    <td>@_campaign.Name</td>
+                                                                    <td>@_character.Name</td>
+                                                                    <td>@_campaign.SessionDate</td>
+                                                                    <td>@_campaign.SessionHour</td>
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -120,6 +160,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignUpdate">Editar</button>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -167,6 +208,34 @@
                                                 }
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de campanhas -->
+                        <div class="modal fade" id="CampaignUpdate" tabindex="-1" aria-labelledby="CampaignUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignUpdateLabel">Edição de Campanha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="campaignname">Nome da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.Name" id="campaignname" name="campaignname"> <br>
+
+                                        <label for="campaigndate">Data da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionDate" id="campaigndate" name="campaigndate"> <br>
+
+                                        <label for="campaignhour">Horário da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionHour" id="campaignhour" name="campaignhour"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Campaigns">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateCampaign">Salvar</button>
                                     </div>
                                 </div>
                             </div>
@@ -352,6 +421,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterUpdate">Editar</button>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -429,33 +499,124 @@
                                                 <tr>
                                                     <th scope="col">Força</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.STR</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.STR)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Destreza</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.DEX</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.DEX)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Constituição</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.CON</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.CON)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Inteligência</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.INT</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.INT)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Sabedoria</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.WIS</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.WIS)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Carisma</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.CHA</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.CHA)</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Vontade</th>
                                                     <td style="text-align: center;">@CharacterService.CharacterData.WIL</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.WIL)</td>
                                                 </tr>
                                             </thead>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de personagens -->
+                        <div class="modal fade" id="CharacterUpdate" tabindex="-1" aria-labelledby="CharacterUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterUpdateLabel">Edição de personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Identificação do Personagem</h5> <br>
+
+                                        <label for="charcampaignId">Id da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
+
+                                        <label for="charname">Nome do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Name" id="charname" name="charname"> <br>
+
+                                        <label for="charrace">Raça: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Race" id="charrace" name="charrace"> <br>
+
+                                        <label for="chargender">Gênero: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Gender" id="chargender" name="chargender"> <br>
+
+                                        <label for="charage">Idade: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Age" id="charage" name="charage"> <br>
+
+                                        <label for="charclass">Classe: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Class" id="charclass" name="charclass"> <br>
+
+                                        <label for="chardescription">Descrição do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Description" id="chardescription" name="chardescription"> <br>
+
+                                        <label for="charhistory">História do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.History" id="charhistory" name="charhistory"> <br><br>
+                                        
+                                        
+                                        <h5>Estatísticas do Personagem</h5> <br>
+
+                                        <label for="charlevel">Nível: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Level" id="charlevel" name="charlevel"> <br><br>
+
+                                        <label for="charhealth">Vida: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Health" id="charhealth" name="charhealth"> <br>
+
+                                        <label for="charmana">Mana: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Mana" id="charmana" name="charmana"> <br><br>
+
+                                        <label for="charPD">Defesa Física: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.PD" id="charPD" name="charPD"> <br>
+
+                                        <label for="charMD">Defesa Mágica: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.MD" id="charMD" name="charMD"> <br><br>
+
+                                        <label for="charSTR">STR: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.STR" id="charSTR" name="charSTR"> <br>
+
+                                        <label for="charDEX">DEX: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.DEX" id="charDEX" name="charDEX"> <br>
+
+                                        <label for="charCON">CON: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CON" id="charCON" name="charCON"> <br>
+
+                                        <label for="charINT">INT: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.INT" id="charINT" name="charINT"> <br>
+
+                                        <label for="charWIS">WIS: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIS" id="charWIS" name="charWIS"> <br>
+
+                                        <label for="charCHA">CHA: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CHA" id="charCHA" name="charCHA"> <br>
+
+                                        <label for="charWIL">WIL: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIL" id="charWIL" name="charWIL"> <br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateCharacter">Salvar</button>
                                     </div>
                                 </div>
                             </div>
@@ -481,11 +642,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-
-                    <!-- Sem uso atualmente -->
-                    <div class="row">
 
                     </div>
 
@@ -579,6 +735,19 @@
         Navigation.NavigateTo("/");
     }
 
+    // Funções para realizar a operação de Update (Put) -------------------------------------------------------------------------------
+    public void UpdateCharacter()
+    {
+        Http.PutAsJsonAsync<Character>($"character/{CharacterService.CharacterData.Id}", CharacterService.CharacterData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateCampaign()
+    {
+        Http.PutAsJsonAsync<Campaign>($"campaign/{CampaignService.CampaignData.Id}", CampaignService.CampaignData);
+        Navigation.NavigateTo("/");
+    }
+
     // Funções para realizar a operação de Delete -------------------------------------------------------------------------------------
     public int IdForDelete;
 
@@ -597,5 +766,34 @@
     {
         Http.DeleteFromJsonAsync<int>($"campaign/{id}");
         Navigation.NavigateTo("/");
+    }
+
+    // Verifica o valor do modificador do status do personagem ----------------------------------------------------------------------------
+    public double modifier = 0;
+    public int modCounter = 0;
+    public string modifierText;
+
+    public string CheckModifier(int? status)
+    {
+        modifier = 0;
+        modCounter = 0;
+
+        while (status >= modCounter)
+        {
+            modifier = (modCounter / 2) - 5;
+            modifier = Math.Round(modifier);
+            modCounter = modCounter + 1;
+        }
+
+        if (modifier >= 0)
+        {
+            modifierText = $"+{modifier}";
+        }
+        else
+        {
+            modifierText = $"{modifier}";
+        }
+
+        return(modifierText);
     }
 }
