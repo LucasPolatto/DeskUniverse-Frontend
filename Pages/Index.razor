@@ -5,6 +5,8 @@
 {
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(250);
+
         Navigation.NavigateTo("/Home");
     }
 }

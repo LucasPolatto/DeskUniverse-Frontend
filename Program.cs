@@ -11,5 +11,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CharacterService>();
 builder.Services.AddSingleton<CampaignService>();
+builder.Services.AddSingleton<ItemService>();
+builder.Services.AddSingleton<SkillService>();
 
 await builder.Build().RunAsync();

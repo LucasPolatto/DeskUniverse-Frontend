@@ -65,20 +65,20 @@
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\campaigns.jpg",
+      "PackagePath": "staticwebassets\\img\\campaigns.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\characters.jpg",
+      "PackagePath": "staticwebassets\\img\\characters.jpg"
+    },
+    {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\fundo1.jpg",
       "PackagePath": "staticwebassets\\img\\fundo1.jpg"
     },
     {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\map.png",
-      "PackagePath": "staticwebassets\\img\\map.png"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\personagem.jpg",
-      "PackagePath": "staticwebassets\\img\\personagem.jpg"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\skill.jpg",
-      "PackagePath": "staticwebassets\\img\\skill.jpg"
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\guide.jpg",
+      "PackagePath": "staticwebassets\\img\\guide.jpg"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\index.html",

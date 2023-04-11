@@ -1,10 +1,14 @@
 @page "/Home"
 @inject NavigationManager Navigation
 @inject HttpClient Http
+@using System.IO
 @using DeskUniverse_Frontend.Models
 @inject UserService UserService
 @inject CharacterService CharacterService
 @inject CampaignService CampaignService
+@inject ItemService ItemService
+@inject SkillService SkillService
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +28,7 @@
                         <!-- Card das campanhas -->
                         <div class="card col" style="width: 18rem;">
                             <a data-bs-toggle="modal" data-bs-target="#Campaigns">
-                                <img src="/img/skill.jpg" class="" alt="...">
+                                <img src="/img/campaigns.jpg" class="" alt="...">
                                 <div class="card-img-overlay">
                                     <h5 class="card-title">Campanhas</h5>
                                     <p class="card-text">Gerencie suas campanhas</p>
@@ -265,7 +269,7 @@
                         <!-- Card dos personagens -->
                         <div class="card col" style="width: 18rem;">
                             <a data-bs-toggle="modal" data-bs-target="#Characters">
-                                <img src="/img/personagem.jpg" class="" alt="...">
+                                <img src="/img/characters.jpg" class="" alt="...">
                                 <div class="card-img-overlay">
                                     <h5 class="card-title">personagens</h5>
                                     <p class="card-text">Gerencie seus personagens</p>
@@ -531,7 +535,63 @@
                                                     <td style="text-align: center;">@CharacterService.CharacterData.WIL</td>
                                                     <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.WIL)</td>
                                                 </tr>
+                                                <br><br>
                                             </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">HABILIDADES</th>
+                                                    <td>
+                                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillCreate" @onclick="ResetSkillData">Criar habilidade</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Descrição</th>
+                                                </tr>
+                                                <tr>
+                                                    @foreach (var _skill in skills)
+                                                    {
+                                                        if (_skill.characterId == CharacterService.CharacterData.Id)
+                                                        {
+                                                            <tr>
+                                                                <td>@_skill.Name</td>
+                                                                <td colspan="3">@_skill.Description</td>
+                                                                <td>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillUpdate" @onclick="(() => SkillService.SkillData = _skill)">Editar</button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#SkillDelete" @onclick="(() => SaveIdForDelete(_skill.Id))">Deletar</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">ITENS</th>
+                                                    <td>
+                                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemCreate" @onclick="ResetItemData">Criar item</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Descrição</th>
+                                                </tr>
+                                                <tr>
+                                                    @foreach (var _item in itens)
+                                                    {
+                                                        if (_item.characterId == CharacterService.CharacterData.Id)
+                                                        {
+                                                            <tr>
+                                                                <td>@_item.Name</td>
+                                                                <td colspan="3">@_item.Description</td>
+                                                                <td>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemUpdate" @onclick="(() => ItemService.ItemData = _item)">Editar</button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ItemDelete" @onclick="(() => SaveIdForDelete(_item.Id))">Deletar</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -643,6 +703,159 @@
                             </div>
                         </div>
 
+                        <!-- Modal de criação de itens -->
+                        <div class="modal fade" id="ItemCreate" tabindex="-1" aria-labelledby="ItemCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemCreateLabel">Criação de Item</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="itemname">Nome do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
+
+                                        <label for="itemdescription">Descrição do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateItem">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de itens -->
+                        <div class="modal fade" id="ItemUpdate" tabindex="-1" aria-labelledby="ItemUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemUpdateLabel">Edição de Item</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="itemname">Nome do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
+
+                                        <label for="itemdescription">Descrição do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateItem">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de item -->
+                        <div class="modal fade" id="ItemDelete" tabindex="-1" aria-labelledby="ItemDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemDeleteLabel">Deletar item?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Um item deletado não pode ser restaurado! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteItem(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de skills -->
+                        <div class="modal fade" id="SkillCreate" tabindex="-1" aria-labelledby="SkillCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillCreateLabel">Criação de Habilidade</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="skillname">Nome da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+
+                                        <label for="skilldescription">Descrição da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateSkill">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de skills -->
+                        <div class="modal fade" id="SkillUpdate" tabindex="-1" aria-labelledby="SkillUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillUpdateLabel">Edição de Item</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="skillname">Nome da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+
+                                        <label for="skilldescription">Descrição da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateSkill">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de skill -->
+                        <div class="modal fade" id="SkillDelete" tabindex="-1" aria-labelledby="SkillDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillDeleteLabel">Deletar habilidade?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Uma habilidade deletada não pode ser restaurada! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteSkill(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card do guia (AINDA NÃO FAZ NADA) -->
+                        <div class="card col" style="width: 18rem;">
+                            <a data-bs-toggle="modal" data-bs-target="#Guide">
+                                <img src="/img/guide.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">Guia</h5>
+                                    <p class="card-text">Aprenda como jogar e desenvolver suas campanhas</p>
+                                </div>
+                            </a>
+                        </div>
+
                     </div>
 
                 </section>
@@ -667,6 +880,8 @@
     {
         CharacterService.CharacterData = new Character();
         CampaignService.CampaignData = new Campaign();
+        ItemService.ItemData = new Item();
+        SkillService.SkillData = new Skill();
         users = await Http.GetFromJsonAsync<List<User>?>("user");
         campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
         characters = await Http.GetFromJsonAsync<List<Character>?>("character");
@@ -709,7 +924,7 @@
 
     }
 
-    //Funções para resetar os dados das variáveis dos serviços------------------------------------------------------------------
+    //Funções para resetar os dados das variáveis dos serviços-------------------------------------------------------------------------
     public void ResetCharacterData()
     {
         CharacterService.CharacterData = new Character();
@@ -720,7 +935,17 @@
         CampaignService.CampaignData = new Campaign();
     }
 
-    // Funções para realizar a operação de Create (Post) -------------------------------------------------------------------------------
+    public void ResetItemData()
+    {
+        ItemService.ItemData = new Item();
+    }
+
+    public void ResetSkillData()
+    {
+        SkillService.SkillData = new Skill();
+    }
+
+    // Funções para realizar a operação de Create (Post) ------------------------------------------------------------------------------
     public void CreateCharacter()
     {
         CharacterService.CharacterData.UserId = UserService.Id;
@@ -735,6 +960,20 @@
         Navigation.NavigateTo("/");
     }
 
+    public void CreateItem()
+    {
+        ItemService.ItemData.characterId = CharacterService.CharacterData.Id;
+        Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void CreateSkill()
+    {
+        SkillService.SkillData.characterId = CharacterService.CharacterData.Id;
+        Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
+        Navigation.NavigateTo("/");
+    }
+
     // Funções para realizar a operação de Update (Put) -------------------------------------------------------------------------------
     public void UpdateCharacter()
     {
@@ -745,6 +984,18 @@
     public void UpdateCampaign()
     {
         Http.PutAsJsonAsync<Campaign>($"campaign/{CampaignService.CampaignData.Id}", CampaignService.CampaignData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateItem()
+    {
+        Http.PutAsJsonAsync<Item>($"item/{ItemService.ItemData.Id}", ItemService.ItemData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateSkill()
+    {
+        Http.PutAsJsonAsync<Skill>($"skill/{SkillService.SkillData.Id}", SkillService.SkillData);
         Navigation.NavigateTo("/");
     }
 
@@ -768,7 +1019,19 @@
         Navigation.NavigateTo("/");
     }
 
-    // Verifica o valor do modificador do status do personagem ----------------------------------------------------------------------------
+    public void DeleteItem(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"item/{id}");
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteSkill(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"skill/{id}");
+        Navigation.NavigateTo("/");
+    }
+
+    // Verifica o valor do modificador do status do personagem ------------------------------------------------------------------------
     public double modifier = 0;
     public int modCounter = 0;
     public string modifierText;
