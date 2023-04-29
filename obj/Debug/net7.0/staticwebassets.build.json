@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "B9tiIazqy/JIGAWUhvn2d1mT7LP3+vqnp+8Fm2gn0yU=",
+  "Hash": "bYHUsFjp5ZHffWCOE8yTKtEJl1d+ymJlUWUWk3J8XKk=",
   "Source": "DeskUniverse-Frontend",
   "BasePath": "/",
   "Mode": "Root",
@@ -7189,6 +7189,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\RPG Guide\\DeskUniverse v0.5.pdf",
+      "SourceId": "DeskUniverse-Frontend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "RPG Guide/DeskUniverse v0.5.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\RPG Guide\\DeskUniverse v0.5.pdf"
     }
   ]
 }

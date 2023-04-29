@@ -16,6 +16,18 @@
     <head>
         <title>Document</title>
         <link rel="stylesheet" href="css/style.css">
+
+        <!--
+        <style>
+            #div1, #div2 {
+            width: 75px;
+            height: 75px;
+            padding: 1px;
+            border: 1px solid #aaaaaa;
+            }
+        </style>
+        -->
+
     </head>
     <body>
         @if (UserService.Logado == true)
@@ -24,6 +36,15 @@
 
                 <section class="container">
                     <div class="row">
+
+                        <!--
+                        DRAG AND DROP TESTE
+
+                        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <br>
+                        <img id="drag1" src="/img/campaigns.jpg" draggable="true" ondragstart="drag(event)" width="75" height="75">
+                        -->
 
                         <!-- Card das campanhas -->
                         <div class="card col" style="width: 18rem;">
@@ -551,7 +572,7 @@
                                                 <tr>
                                                     @foreach (var _skill in skills)
                                                     {
-                                                        if (_skill.characterId == CharacterService.CharacterData.Id)
+                                                        if (_skill.CharacterId == CharacterService.CharacterData.Id)
                                                         {
                                                             <tr>
                                                                 <td>@_skill.Name</td>
@@ -578,7 +599,7 @@
                                                 <tr>
                                                     @foreach (var _item in itens)
                                                     {
-                                                        if (_item.characterId == CharacterService.CharacterData.Id)
+                                                        if (_item.CharacterId == CharacterService.CharacterData.Id)
                                                         {
                                                             <tr>
                                                                 <td>@_item.Name</td>
@@ -845,9 +866,9 @@
                             </div>
                         </div>
 
-                        <!-- Card do guia (AINDA NÃO FAZ NADA) -->
+                        <!-- Card do guia -->
                         <div class="card col" style="width: 18rem;">
-                            <a data-bs-toggle="modal" data-bs-target="#Guide">
+                            <a href="/RPG Guide/DeskUniverse v0.5.pdf" target="_blank">
                                 <img src="/img/guide.jpg" class="" alt="...">
                                 <div class="card-img-overlay">
                                     <h5 class="card-title">Guia</h5>
@@ -962,14 +983,14 @@
 
     public void CreateItem()
     {
-        ItemService.ItemData.characterId = CharacterService.CharacterData.Id;
+        ItemService.ItemData.CharacterId = CharacterService.CharacterData.Id;
         Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
         Navigation.NavigateTo("/");
     }
 
     public void CreateSkill()
     {
-        SkillService.SkillData.characterId = CharacterService.CharacterData.Id;
+        SkillService.SkillData.CharacterId = CharacterService.CharacterData.Id;
         Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
         Navigation.NavigateTo("/");
     }
