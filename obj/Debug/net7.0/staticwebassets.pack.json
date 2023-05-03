@@ -85,6 +85,14 @@
       "PackagePath": "staticwebassets\\img\\guide.jpg"
     },
     {
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\mapa_teste.jpg",
+      "PackagePath": "staticwebassets\\img\\mapa_teste.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\token_teste.png",
+      "PackagePath": "staticwebassets\\img\\token_teste.png"
+    },
+    {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },

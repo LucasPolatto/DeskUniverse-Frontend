@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bYHUsFjp5ZHffWCOE8yTKtEJl1d+ymJlUWUWk3J8XKk=",
+  "Hash": "m+nZx8qalByuaRIaEOqqhnfSTSvH4yiJ054Xjd/gkRg=",
   "Source": "DeskUniverse-Frontend",
   "BasePath": "/",
   "Mode": "Root",
@@ -7172,6 +7172,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\guide.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\mapa_teste.jpg",
+      "SourceId": "DeskUniverse-Frontend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "img/mapa_teste.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\mapa_teste.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\token_teste.png",
+      "SourceId": "DeskUniverse-Frontend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "img/token_teste.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\token_teste.png"
     },
     {
       "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\index.html",

@@ -1,32 +1,22 @@
 @page "/Home"
 @inject NavigationManager Navigation
 @inject HttpClient Http
-@using System.IO
 @using DeskUniverse_Frontend.Models
 @inject UserService UserService
 @inject CharacterService CharacterService
 @inject CampaignService CampaignService
 @inject ItemService ItemService
 @inject SkillService SkillService
+@inject BoardService BoardService
 
 
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
+
         <title>Document</title>
         <link rel="stylesheet" href="css/style.css">
-
-        <!--
-        <style>
-            #div1, #div2 {
-            width: 75px;
-            height: 75px;
-            padding: 1px;
-            border: 1px solid #aaaaaa;
-            }
-        </style>
-        -->
 
     </head>
     <body>
@@ -36,15 +26,6 @@
 
                 <section class="container">
                     <div class="row">
-
-                        <!--
-                        DRAG AND DROP TESTE
-
-                        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                        <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                        <br>
-                        <img id="drag1" src="/img/campaigns.jpg" draggable="true" ondragstart="drag(event)" width="75" height="75">
-                        -->
 
                         <!-- Card das campanhas -->
                         <div class="card col" style="width: 18rem;">
@@ -97,6 +78,7 @@
                                                             <td>@_campaign.SessionHour</td>
                                                             <td>
                                                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignView" @onclick="(() => CampaignService.CampaignSave(_campaign))">Visualizar</button>
+                                                                <button class="btn btn-success" @onclick="Play" data-bs-dismiss="modal">Jogar</button>
 
                                                                 <!-- Botão de Delete de campanha -->
                                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CampaignDelete" @onclick="(() => SaveIdForDelete(_campaign.Id))">Deletar</button>
@@ -186,6 +168,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignUpdate">Editar</button>
+                                        <button class="btn btn-success" @onclick="Play" data-bs-dismiss="modal">Jogar</button>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -1079,5 +1062,11 @@
         }
 
         return(modifierText);
+    }
+
+    // Abre o tabuleiro da campanha -------------------------------------------------------------------------------------------------
+    public void Play()
+    {
+        Navigation.NavigateTo("/Board");
     }
 }

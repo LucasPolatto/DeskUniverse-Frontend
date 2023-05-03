@@ -1,4 +1,4 @@
-namespace DeskUniverse_Backend.Models;
+namespace DeskUniverse_Frontend.Models;
 
 public class Image
 {
