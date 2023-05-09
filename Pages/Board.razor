@@ -37,14 +37,14 @@
                         <table class="table" align="center" style="width:1%; background: url(/img/mapa_teste.jpg) no-repeat fixed center; background-size: 100% 100%;">
                             <tbody>
 
-                                @for (y = 5; y > 0; y--)
+                                @for (y = 6; y > 0; y--)
                                 {
                                     
                                     <tr>
-                                        @for (x = 0; x < 5; x++, Position(x,y))
+                                        @for (x = 0; x < 10; x++, Position(x,y))
                                         {
                                             <td>
-                                                <div id="@position" style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                                <div id=@position style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                                             </td>
                                         }
                                     </tr>
