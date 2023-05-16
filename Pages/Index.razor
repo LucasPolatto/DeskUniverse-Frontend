@@ -1,12 +1,36 @@
 ﻿@page "/"
 @inject NavigationManager Navigation
+@inject BoardService BoardService
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <style>
+            body
+            {
+                background-color: black;
+            }
+        </style>
+
+    </head>
+
+    <body></body>
+</html>
 
 @code
 {
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-
-        Navigation.NavigateTo("/Home");
+        if (BoardService.Playing == true)
+        {
+            Navigation.NavigateTo("/Play");
+        }
+        else
+        {
+            await Task.Delay(500);
+            Navigation.NavigateTo("/Home");
+        }
+        
     }
 }

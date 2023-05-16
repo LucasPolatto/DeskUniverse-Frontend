@@ -1,0 +1,135 @@
+@page "/Play"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject UserService UserService
+@inject CharacterService CharacterService
+@inject CampaignService CampaignService
+@inject BoardService BoardService
+@inject TokenService TokenService
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>Document</title>
+        <link rel="stylesheet" href="css/style.css">
+
+        <style>
+            table, tr, td
+            {
+                border:1px solid white;
+            }
+        </style>
+
+    </head>
+    <body>
+        @if (UserService.Logado == true)
+        {
+            <div class="body">
+
+                <section class="container">
+                    <div class="row">
+
+                        <table class="table" align="center" style="width:1%; background: url(@BoardService.BoardData.BackgroundURL) no-repeat fixed center; background-size: 100% 100%;">
+                            <tbody>
+
+                                @for (y = 6; y > 0; y--)
+                                {
+                                    
+                                    <tr>
+                                        @for (x = 0; x < 10; x++, Position(x,y))
+                                        {
+                                            <td>
+                                                <div id=@position style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                            </td>
+                                        }
+                                    </tr>
+
+                                }
+                                
+                            </tbody>
+
+                            <tfoot>
+
+                                <img id="drag1" src="/img/token_teste.png" draggable="true" ondragstart="drag(event)" width="75" height="75">
+                            
+                            </tfoot>
+                        </table>
+                        
+
+                    </div>
+                </section>
+
+            </div>
+        }
+        else{Navigation.NavigateTo("/Login");}
+    </body>
+</html>
+
+@code
+{
+    // Salva todos os dados das tabelas do banco em listas ----------------------------------------------------------------------------
+    public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
+    public List<Character>? characters { get; set; } = new List<Character>();
+    public List<Image>? images { get; set; } = new List<Image>();
+    public List<Token>? tokens { get; set; } = new List<Token>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+        images = await Http.GetFromJsonAsync<List<Image>?>("image");
+        tokens = await Http.GetFromJsonAsync<List<Token>?>("token");
+        
+        // Cria tokens de personagens
+        foreach (var _character in characters)
+        {
+            if (_character.CampaignId == BoardService.BoardData.CampaignId)
+            {
+                foreach (var _token in tokens)
+                {
+                    if (_token.CharacterId == _character.Id)
+                    {
+                        
+                    }
+                    else
+                    {
+                        TokenService.TokenData.CampaignId = BoardService.BoardData.CampaignId;
+                        TokenService.TokenData.CharacterId = _character.Id;
+                        TokenService.TokenData.Position = "";
+                        TokenService.TokenData.Health = _character.Health;
+                        TokenService.TokenData.Mana = _character.Mana;
+                        
+                        foreach (var _image in images)
+                        {
+                            if (_image.CharacterId == _character.Id)
+                            {
+                                TokenService.TokenData.ImageURL = _image.ImageURL;
+                            }
+                        } 
+
+                        await Http.PostAsJsonAsync<Token>("token", TokenService.TokenData);
+                    }
+                }
+            }
+        }
+    }
+
+    // Variáveis e função de geração de localização x,y de Tokens ---------------------------------------------------------------------
+    public int x;
+    public int y;
+    public string position;
+
+    public string Position(int x, int y)
+    {
+        x = x + 1;
+
+        string sx = Convert.ToString(x);
+        string sy = Convert.ToString(y);
+
+        return (position = $"{sx},{sy}");
+    }
+}

@@ -7,6 +7,7 @@
 @inject CampaignService CampaignService
 @inject ItemService ItemService
 @inject SkillService SkillService
+@inject ImageService ImageService
 @inject BoardService BoardService
 
 
@@ -98,7 +99,9 @@
                                                             <td>@_campaign.SessionHour</td>
                                                             <td>
                                                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignView" @onclick="(() => CampaignService.CampaignSave(_campaign))">Visualizar</button>
-                                                                <button class="btn btn-success" @onclick="Play" data-bs-dismiss="modal">Jogar</button>
+                                                                
+                                                                <!-- Botão para Jogar -->
+                                                                <button class="btn btn-success" @onclick="(()=> Play(_campaign.Id))" data-bs-dismiss="modal">Jogar</button>
 
                                                                 <!-- Botão de Delete de campanha -->
                                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CampaignDelete" @onclick="(() => SaveIdForDelete(_campaign.Id))">Deletar</button>
@@ -144,6 +147,10 @@
                                                                     <td>@_character.Name</td>
                                                                     <td>@_campaign.SessionDate</td>
                                                                     <td>@_campaign.SessionHour</td>
+                                                                    <td>
+                                                                        <!-- Botão para Jogar -->
+                                                                        <button class="btn btn-success" @onclick="(()=> Play(_campaign.Id))" data-bs-dismiss="modal">Jogar</button>
+                                                                    </td>
                                                                 }
                                                             }
                                                         }
@@ -168,7 +175,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@imageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="campaignname">Nome da Campanha: </label>
                                         <input type="text" class="form-control" @bind="@CampaignService.CampaignData.Name" id="campaignname" name="campaignname"> <br>
@@ -199,7 +206,10 @@
                                     </div>
                                     <div class="modal-body">
                                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignUpdate">Editar</button>
-                                        <button class="btn btn-success" @onclick="Play" data-bs-dismiss="modal">Jogar</button>
+                                        
+                                        <!-- Botão para Jogar -->
+                                        <button class="btn btn-success" @onclick="(()=> Play(CampaignService.CampaignData.Id))" data-bs-dismiss="modal">Jogar</button>
+                                        
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -278,6 +288,17 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.CampaignId == CampaignService.CampaignData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
                                         <label for="campaignname">Nome da Campanha: </label>
                                         <input type="text" class="form-control" @bind="@CampaignService.CampaignData.Name" id="campaignname" name="campaignname"> <br>
 
@@ -402,7 +423,7 @@
                                         <h5>Identificação do Personagem</h5> <br>
 
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@imageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="charcampaignId">Id da Campanha: </label>
                                         <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
@@ -698,6 +719,17 @@
                                     <div class="modal-body">
                                         <h5>Identificação do Personagem</h5> <br>
 
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.CharacterId == CharacterService.CharacterData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
                                         <label for="charcampaignId">Id da Campanha: </label>
                                         <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
 
@@ -802,7 +834,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@imageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="itemname">Nome do Item: </label>
                                         <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
@@ -829,6 +861,17 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.ItemId == ItemService.ItemData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
                                         <label for="itemname">Nome do Item: </label>
                                         <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
 
@@ -876,7 +919,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@imageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="skillname">Nome da Habilidade: </label>
                                         <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
@@ -903,6 +946,17 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.SkillId == SkillService.SkillData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
                                         <label for="skillname">Nome da Habilidade: </label>
                                         <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
 
@@ -962,10 +1016,6 @@
 
 @code
 {
-    // Variáveis ----------------------------------------------------------------------------------------------------------------------
-    public Image image = new Image();
-    public string imageURL = "";
-
     // Salva todos os dados das tabelas do banco em listas ----------------------------------------------------------------------------
     public List<User>? users { get; set; } = new List<User>();
     public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
@@ -973,19 +1023,21 @@
     public List<Skill>? skills { get; set; } = new List<Skill>();
     public List<Item>? itens { get; set; } = new List<Item>();
     public List<Image>? images { get; set; } = new List<Image>();
+    public List<Board>? boards { get; set; } = new List<Board>();
 
     protected override async Task OnInitializedAsync()
     {
-        CharacterService.CharacterData = new Character();
-        CampaignService.CampaignData = new Campaign();
-        ItemService.ItemData = new Item();
-        SkillService.SkillData = new Skill();
+        ResetCampaignData();
+        ResetCharacterData();
+        ResetSkillData();
+        ResetItemData();
         users = await Http.GetFromJsonAsync<List<User>?>("user");
         campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
         characters = await Http.GetFromJsonAsync<List<Character>?>("character");
         skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
         itens = await Http.GetFromJsonAsync<List<Item>?>("item");
         images = await Http.GetFromJsonAsync<List<Image>?>("image");
+        boards = await Http.GetFromJsonAsync<List<Board>?>("board");
     }
 
     // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
@@ -1027,21 +1079,26 @@
     public void ResetCharacterData()
     {
         CharacterService.CharacterData = new Character();
+        ImageService.ImageData = new Image();
     }
 
     public void ResetCampaignData()
     {
         CampaignService.CampaignData = new Campaign();
+        ImageService.ImageData = new Image();
+        BoardService.BoardData = new Board();
     }
 
     public void ResetItemData()
     {
         ItemService.ItemData = new Item();
+        ImageService.ImageData = new Image();
     }
 
     public void ResetSkillData()
     {
         SkillService.SkillData = new Skill();
+        ImageService.ImageData = new Image();
     }
 
     // Funções para realizar a operação de Create (Post) ------------------------------------------------------------------------------
@@ -1051,15 +1108,19 @@
         await Http.PostAsJsonAsync<Character>("character", CharacterService.CharacterData);
         characters = await Http.GetFromJsonAsync<List<Character>?>("character");
 
-        image.ImageURL = imageURL;
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
         foreach(var _character in characters)
         {
             if(_character.UserId == CharacterService.CharacterData.UserId && _character.Name == CharacterService.CharacterData.Name)
             {
-                image.CharacterId = _character.Id;
+                ImageService.ImageData.CharacterId = _character.Id;
             }
         }
-        await Http.PostAsJsonAsync<Image>("image", image);
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
 
         Navigation.NavigateTo("/");
     }
@@ -1070,15 +1131,23 @@
         await Http.PostAsJsonAsync<Campaign>("campaign", CampaignService.CampaignData);
         campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
 
-        image.ImageURL = imageURL;
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
         foreach(var _campaign in campaigns)
         {
             if(_campaign.UserId == CampaignService.CampaignData.UserId && _campaign.Name == CampaignService.CampaignData.Name)
             {
-                image.CampaignId = _campaign.Id;
+                ImageService.ImageData.CampaignId = _campaign.Id;
+                
+                BoardService.BoardData.CampaignId = _campaign.Id;
+                BoardService.BoardData.Name = _campaign.Name;
             }
         }
-        await Http.PostAsJsonAsync<Image>("image", image);
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Board>("board", BoardService.BoardData);
 
         Navigation.NavigateTo("/");
     }
@@ -1089,15 +1158,19 @@
         await Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
         itens = await Http.GetFromJsonAsync<List<Item>?>("item");
 
-        image.ImageURL = imageURL;
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
         foreach(var _item in itens)
         {
             if(_item.CharacterId == ItemService.ItemData.CharacterId && _item.Name == ItemService.ItemData.Name)
             {
-                image.ItemId = _item.Id;
+                ImageService.ImageData.ItemId = _item.Id;
             }
         }
-        await Http.PostAsJsonAsync<Image>("image", image);
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
 
         Navigation.NavigateTo("/");
     }
@@ -1108,15 +1181,19 @@
         await Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
         skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
 
-        image.ImageURL = imageURL;
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
         foreach(var _skill in skills)
         {
             if(_skill.CharacterId == SkillService.SkillData.CharacterId && _skill.Name == SkillService.SkillData.Name)
             {
-                image.SkillId = _skill.Id;
+                ImageService.ImageData.SkillId = _skill.Id;
             }
         }
-        await Http.PostAsJsonAsync<Image>("image", image);
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
 
         Navigation.NavigateTo("/");
     }
@@ -1125,24 +1202,28 @@
     public void UpdateCharacter()
     {
         Http.PutAsJsonAsync<Character>($"character/{CharacterService.CharacterData.Id}", CharacterService.CharacterData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
         Navigation.NavigateTo("/");
     }
 
     public void UpdateCampaign()
     {
         Http.PutAsJsonAsync<Campaign>($"campaign/{CampaignService.CampaignData.Id}", CampaignService.CampaignData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
         Navigation.NavigateTo("/");
     }
 
     public void UpdateItem()
     {
         Http.PutAsJsonAsync<Item>($"item/{ItemService.ItemData.Id}", ItemService.ItemData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
         Navigation.NavigateTo("/");
     }
 
     public void UpdateSkill()
     {
         Http.PutAsJsonAsync<Skill>($"skill/{SkillService.SkillData.Id}", SkillService.SkillData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
         Navigation.NavigateTo("/");
     }
 
@@ -1194,6 +1275,14 @@
             if(_image.CampaignId == id)
             {
                 Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        foreach (var _board in boards)
+        {
+            if(_board.CampaignId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"board/{_board.Id}");
             }
         }
 
@@ -1260,8 +1349,18 @@
     }
 
     // Abre o tabuleiro da campanha -------------------------------------------------------------------------------------------------
-    public void Play()
+    public void Play(int id)
     {
-        Navigation.NavigateTo("/Board");
+        foreach (var _board in boards)
+        {
+            if (_board.CampaignId == id)
+            {
+                BoardService.BoardSave(_board);
+                
+                BoardService.Playing = true;
+
+                Navigation.NavigateTo("/Play");
+            }
+        }
     }
 }

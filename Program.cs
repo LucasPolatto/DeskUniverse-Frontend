@@ -13,7 +13,9 @@ builder.Services.AddSingleton<CharacterService>();
 builder.Services.AddSingleton<CampaignService>();
 builder.Services.AddSingleton<ItemService>();
 builder.Services.AddSingleton<SkillService>();
+builder.Services.AddSingleton<ImageService>();
 builder.Services.AddSingleton<BoardService>();
+builder.Services.AddSingleton<TokenService>();
 
 
 await builder.Build().RunAsync();
