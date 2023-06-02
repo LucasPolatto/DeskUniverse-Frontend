@@ -7,15 +7,69 @@
     <head>
 
         <style>
+
             body
             {
-                background-color: black;
+                height: 100vh;
+            }
+            .body
+            {
+                display: flex;
+                align-items: center;
+                background-image: url("/img/fundo1.jpg");
+                width: 100%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                background-attachment: fixed;
             }
         </style>
 
     </head>
 
-    <body></body>
+    <body>
+        <div class="body">
+
+            <section class="container">
+                <div class="row">
+
+                    <!-- Card das campanhas -->
+                    <div class="card col" style="width: 18rem;">
+                        <a data-bs-toggle="" data-bs-target="">
+                            <img src="/img/campaigns.jpg" class="" alt="...">
+                            <div class="card-img-overlay">
+                                <h5 class="card-title">Campanhas</h5>
+                                <p class="card-text">Gerencie suas campanhas</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card dos personagens -->
+                    <div class="card col" style="width: 18rem;">
+                        <a data-bs-toggle="" data-bs-target="">
+                            <img src="/img/characters.jpg" class="" alt="...">
+                            <div class="card-img-overlay">
+                                <h5 class="card-title">personagens</h5>
+                                <p class="card-text">Gerencie seus personagens</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card do guia -->
+                    <div class="card col" style="width: 18rem;">
+                        <a href="" target="">
+                            <img src="/img/guide.jpg" class="" alt="...">
+                            <div class="card-img-overlay">
+                                <h5 class="card-title">Guia</h5>
+                                <p class="card-text">Aprenda como jogar e desenvolver suas campanhas</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
 </html>
 
 @code

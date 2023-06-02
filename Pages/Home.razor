@@ -9,6 +9,7 @@
 @inject SkillService SkillService
 @inject ImageService ImageService
 @inject BoardService BoardService
+@inject TokenService TokenService
 
 
 <!DOCTYPE html>
@@ -1024,6 +1025,7 @@
     public List<Item>? itens { get; set; } = new List<Item>();
     public List<Image>? images { get; set; } = new List<Image>();
     public List<Board>? boards { get; set; } = new List<Board>();
+    public List<Token>? tokens { get; set; } = new List<Token>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -1038,6 +1040,7 @@
         itens = await Http.GetFromJsonAsync<List<Item>?>("item");
         images = await Http.GetFromJsonAsync<List<Image>?>("image");
         boards = await Http.GetFromJsonAsync<List<Board>?>("board");
+        tokens = await Http.GetFromJsonAsync<List<Token>?>("token");
     }
 
     // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
@@ -1080,6 +1083,7 @@
     {
         CharacterService.CharacterData = new Character();
         ImageService.ImageData = new Image();
+        TokenService.TokenData = new Token();
     }
 
     public void ResetCampaignData()
@@ -1118,9 +1122,17 @@
             if(_character.UserId == CharacterService.CharacterData.UserId && _character.Name == CharacterService.CharacterData.Name)
             {
                 ImageService.ImageData.CharacterId = _character.Id;
+                
+                TokenService.TokenData.CharacterId = _character.Id;
+                TokenService.TokenData.CampaignId = _character.CampaignId;
+                TokenService.TokenData.ImageURL = "/img/token.png";
+                TokenService.TokenData.Position = "";
+                TokenService.TokenData.Health = _character.Health;
+                TokenService.TokenData.Mana = _character.Mana;
             }
         }
         await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Token>("token", TokenService.TokenData);
 
         Navigation.NavigateTo("/");
     }
@@ -1144,6 +1156,7 @@
                 
                 BoardService.BoardData.CampaignId = _campaign.Id;
                 BoardService.BoardData.Name = _campaign.Name;
+                BoardService.BoardData.BackgroundURL = "";
             }
         }
         await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
@@ -1201,8 +1214,19 @@
     // Funções para realizar a operação de Update (Put) -------------------------------------------------------------------------------
     public void UpdateCharacter()
     {
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+                TokenService.TokenData.CampaignId = CharacterService.CharacterData.CampaignId;
+            }
+        }
+
         Http.PutAsJsonAsync<Character>($"character/{CharacterService.CharacterData.Id}", CharacterService.CharacterData);
         Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Http.PutAsJsonAsync<Token>($"token/{TokenService.TokenData.Id}", TokenService.TokenData);
+
         Navigation.NavigateTo("/");
     }
 
@@ -1260,6 +1284,14 @@
             if(_skill.CharacterId == id)
             {
                 DeleteSkill(_skill.Id);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if(_token.CharacterId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"token/{_token.Id}");
             }
         }
 

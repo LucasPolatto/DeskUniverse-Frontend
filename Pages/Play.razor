@@ -7,6 +7,8 @@
 @inject CampaignService CampaignService
 @inject BoardService BoardService
 @inject TokenService TokenService
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
 
 
 <!DOCTYPE html>
@@ -22,6 +24,18 @@
             {
                 border:1px solid white;
             }
+
+            .column 
+            {
+                float: left;
+                width: 15%;
+                height: 600px;
+            }
+
+            label
+            {
+                color: white;
+            }
         </style>
 
     </head>
@@ -32,34 +46,76 @@
 
                 <section class="container">
                     <div class="row">
-
-                        <table class="table" align="center" style="width:1%; background: url(@BoardService.BoardData.BackgroundURL) no-repeat fixed center; background-size: 100% 100%;">
-                            <tbody>
-
-                                @for (y = 6; y > 0; y--)
-                                {
-                                    
-                                    <tr>
-                                        @for (x = 0; x < 10; x++, Position(x,y))
-                                        {
-                                            <td>
-                                                <div id=@position style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                                            </td>
-                                        }
-                                    </tr>
-
-                                }
-                                
-                            </tbody>
-
-                            <tfoot>
-
-                                <img id="drag1" src="/img/token_teste.png" draggable="true" ondragstart="drag(event)" width="75" height="75">
-                            
-                            </tfoot>
-                        </table>
                         
+                        <div class="column" style="background-color: rgb(35, 35, 35); overflow: auto;">
 
+                            <br>
+                            <button type="button" class="btn btn-primary" @onclick="Voltar">Voltar</button>
+                            <br>
+                            <label for="gameboardURL">URL do background: </label>
+                            <input type="text" class="form-control" @bind="BoardService.BoardData.BackgroundURL" id="gameboardURL" name="gameboardURL">
+                            <button type="button" class="btn btn-primary" @onclick="SaveBackground">Salvar</button>
+                            <button type="button" class="btn btn-primary" @onclick="LoadBackground">Carregar</button>
+                            <br><br>
+                            
+                            @foreach (var _character in characters)
+                                    {
+                                        if (_character.CampaignId == BoardService.BoardData.CampaignId)
+                                        {
+                                            foreach (var _token in tokens)
+                                            {
+                                                if (_token.CharacterId == _character.Id)
+                                                {
+                                                    <img id="@_character.Name" src="@_token.ImageURL" draggable="true" ondragstart="drag(event)" width="75" height="75"><br>
+
+                                                    // Pega salva o token do personagem do usuário
+                                                    if (_character.Id == UserService.Id)
+                                                    {
+                                                        TokenService.TokenSave(_token);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                        </div>
+
+                        <div class="column" style="width: 70%; overflow: auto;">
+
+                            <table class="table" id="gameBoard" align="center" style="width:1%; background: url(@BoardService.BoardData.BackgroundURL) no-repeat left top; background-size: auto;">
+                                <tbody>
+
+                                    @for (y = 25; y > 0; y--)
+                                    {
+                                        
+                                        <tr>
+                                            @for (x = 0; x < 25; x++, Position(x,y))
+                                            {
+                                                <td>
+                                                    <div id="@position" style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                                </td>
+                                            }
+                                        </tr>
+
+                                    }
+                                    
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <div class="column" style="background-color: rgb(35, 35, 35); overflow: auto;">
+
+                            <label for="tokenURL">URL do Token: </label>
+                            <input type="text" class="form-control" onchange="getTokenURL(this.value)" id="tokenURL" name="tokenURL">
+
+                            <button type="button" class="btn btn-primary" onclick="createToken()">Criar Token</button>
+                            <br><br>
+                            <div id="deleteTokenSlot" style="background-image: url(img/trash-icon.png); background-repeat:no-repeat; background-position: center center; width: 75px; height: 75px; padding: 1px; border: 1px solid #aaaaaa;" ondrop="deleteToken(event)" ondragover="allowDrop(event)"></div>
+                            <div id="createTokenSlot" style="width: 75px; height: 75px; padding: 1px; border: 1px solid rgb(35, 35, 35);" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        </div>
+                        
                     </div>
                 </section>
 
@@ -83,39 +139,6 @@
         characters = await Http.GetFromJsonAsync<List<Character>?>("character");
         images = await Http.GetFromJsonAsync<List<Image>?>("image");
         tokens = await Http.GetFromJsonAsync<List<Token>?>("token");
-        
-        // Cria tokens de personagens
-        foreach (var _character in characters)
-        {
-            if (_character.CampaignId == BoardService.BoardData.CampaignId)
-            {
-                foreach (var _token in tokens)
-                {
-                    if (_token.CharacterId == _character.Id)
-                    {
-                        
-                    }
-                    else
-                    {
-                        TokenService.TokenData.CampaignId = BoardService.BoardData.CampaignId;
-                        TokenService.TokenData.CharacterId = _character.Id;
-                        TokenService.TokenData.Position = "";
-                        TokenService.TokenData.Health = _character.Health;
-                        TokenService.TokenData.Mana = _character.Mana;
-                        
-                        foreach (var _image in images)
-                        {
-                            if (_image.CharacterId == _character.Id)
-                            {
-                                TokenService.TokenData.ImageURL = _image.ImageURL;
-                            }
-                        } 
-
-                        await Http.PostAsJsonAsync<Token>("token", TokenService.TokenData);
-                    }
-                }
-            }
-        }
     }
 
     // Variáveis e função de geração de localização x,y de Tokens ---------------------------------------------------------------------
@@ -131,5 +154,25 @@
         string sy = Convert.ToString(y);
 
         return (position = $"{sx},{sy}");
+    }
+
+    // Volta para a página Home -------------------------------------------------------------------------------------------------------
+    public void Voltar()
+    {
+        BoardService.Playing = false;
+        Navigation.NavigateTo("/");
+    }
+
+    // Carrega o background -----------------------------------------------------------------------------------------------------------
+    public async void LoadBackground()
+    {
+        await JSRuntime.InvokeVoidAsync("changeBackground", BoardService.BoardData.BackgroundURL);
+    }
+
+    // Salva o background do jogo -------------------------------------------------------------------------------------------------------------------
+    public void SaveBackground()
+    {
+        Http.PutAsJsonAsync<Board>($"board/{BoardService.BoardData.Id}", BoardService.BoardData);
+        JSRuntime.InvokeVoidAsync("alertSaveBackground");
     }
 }

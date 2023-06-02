@@ -65,6 +65,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\functions.js",
+      "PackagePath": "staticwebassets\\functions.js"
+    },
+    {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\icon-192.png",
       "PackagePath": "staticwebassets\\icon-192.png"
     },
@@ -85,12 +89,12 @@
       "PackagePath": "staticwebassets\\img\\guide.jpg"
     },
     {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\mapa_teste.jpg",
-      "PackagePath": "staticwebassets\\img\\mapa_teste.jpg"
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\token.png",
+      "PackagePath": "staticwebassets\\img\\token.png"
     },
     {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\token_teste.png",
-      "PackagePath": "staticwebassets\\img\\token_teste.png"
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\trash-icon.png",
+      "PackagePath": "staticwebassets\\img\\trash-icon.png"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\index.html",
