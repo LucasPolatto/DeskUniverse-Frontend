@@ -52,6 +52,16 @@
                             <br>
                             <button type="button" class="btn btn-primary" @onclick="Voltar">Voltar</button>
                             <br>
+                            @if (UserService.Id != CampaignService.CampaignData.UserId)
+                            {
+                                <br>
+                                <label for="gameboardURL">URL do Token do personagem: </label>
+                                <input type="text" class="form-control" @bind="TokenService.TokenData.ImageURL" id="gameboardURL" name="gameboardURL">
+                                <button type="button" class="btn btn-primary" @onclick="SavePlayerToken">Salvar</button>
+                                <button type="button" class="btn btn-primary" @onclick="LoadPlayerToken">Carregar</button>
+                                <br>
+                            }
+                            <br>
                             <label for="gameboardURL">URL do background: </label>
                             <input type="text" class="form-control" @bind="BoardService.BoardData.BackgroundURL" id="gameboardURL" name="gameboardURL">
                             <button type="button" class="btn btn-primary" @onclick="SaveBackground">Salvar</button>
@@ -163,16 +173,33 @@
         Navigation.NavigateTo("/");
     }
 
-    // Carrega o background -----------------------------------------------------------------------------------------------------------
-    public async void LoadBackground()
+    // Altera o background ------------------------------------------------------------------------------------------------------------
+    public void LoadBackground() //Carrega uma nova imagem, mas não salva para jogos futuros
     {
-        await JSRuntime.InvokeVoidAsync("changeBackground", BoardService.BoardData.BackgroundURL);
+        JSRuntime.InvokeVoidAsync("changeBackground", BoardService.BoardData.BackgroundURL);
     }
 
-    // Salva o background do jogo -------------------------------------------------------------------------------------------------------------------
-    public void SaveBackground()
+    public void SaveBackground() //Carrega uma nova imagem e salva para jogos futuros
     {
+        JSRuntime.InvokeVoidAsync("changeBackground", BoardService.BoardData.BackgroundURL);
+
         Http.PutAsJsonAsync<Board>($"board/{BoardService.BoardData.Id}", BoardService.BoardData);
         JSRuntime.InvokeVoidAsync("alertSaveBackground");
+    }
+
+    // Altera o token do Usuário ------------------------------------------------------------------------------------------------------
+    public void LoadPlayerToken() //Carrega uma nova imagem, mas não salva para jogos futuros
+    {
+        // O CharacterService.CharacterData.Name é utilizado como Id para o Token do player gerado no tabuleiro
+        JSRuntime.InvokeVoidAsync("playerTokenChange", CharacterService.CharacterData.Name, TokenService.TokenData.ImageURL);
+    }
+
+    public void SavePlayerToken() //Carrega uma nova imagem e salva para jogos futuros
+    {
+        // O CharacterService.CharacterData.Name é utilizado como Id para o Token do player gerado no tabuleiro
+        JSRuntime.InvokeVoidAsync("playerTokenChange", CharacterService.CharacterData.Name, TokenService.TokenData.ImageURL);
+
+        Http.PutAsJsonAsync<Token>($"token/{TokenService.TokenData.Id}", TokenService.TokenData);
+        JSRuntime.InvokeVoidAsync("alertSavePlayerToken");
     }
 }

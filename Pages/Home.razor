@@ -1383,6 +1383,30 @@
     // Abre o tabuleiro da campanha -------------------------------------------------------------------------------------------------
     public void Play(int id)
     {
+        foreach (var _campaign in campaigns)
+        {
+            if (_campaign.Id == id)
+            {
+                CampaignService.CampaignSave(_campaign);
+            }
+        }
+
+        foreach (var _character in characters)
+        {
+            if (_character.CampaignId == id && _character.UserId == UserService.Id)
+            {
+                CharacterService.CharacterSave(_character);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+            }
+        }
+
         foreach (var _board in boards)
         {
             if (_board.CampaignId == id)

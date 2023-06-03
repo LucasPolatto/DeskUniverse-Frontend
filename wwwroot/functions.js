@@ -46,7 +46,17 @@ function changeBackground(backgroundURL) {
     table.style.backgroundImage = "url(" + backgroundURL + ")";
 }
 
+// Altera a imagem do Token do jogador ------------------------------------------------------------------------------------------------
+function playerTokenChange(tokenId, tokenImageURL) {
+    var token = document.getElementById(tokenId);
+    token.src = tokenImageURL;
+}
+
 // Alertas ----------------------------------------------------------------------------------------------------------------------------
 function alertSaveBackground() {
     alert("A imagem de background foi salva.")
+}
+
+function alertSavePlayerToken() {
+    alert("A imagem do seu token foi salva.")
 }
