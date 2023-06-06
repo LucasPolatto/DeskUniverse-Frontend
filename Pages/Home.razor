@@ -26,6 +26,11 @@
                 color: white;
             }
 
+            td, th
+            {
+                text-align: center;
+            }
+
             h1, h2, h3, h4, h5 
             {
                 color: white;
@@ -553,12 +558,12 @@
                                                 <br>
                                                 <tr>
                                                     <th scope="col">Descrição</th>
-                                                    <td colspan="3">@CharacterService.CharacterData.Description</td>
+                                                    <td colspan="3" style="text-align: justify;">@CharacterService.CharacterData.Description</td>
                                                 </tr>
                                                 <br>
                                                 <tr>
                                                     <th scope="col">História</th>
-                                                    <td colspan="3">@CharacterService.CharacterData.History</td>
+                                                    <td colspan="3" style="text-align: justify;">@CharacterService.CharacterData.History</td>
                                                 </tr>
                                                 <br><br>
                                                 <tr>
@@ -640,9 +645,8 @@
                                                 <tr>
                                                     <th scope="col">Imagem</th>
                                                     <th scope="col">Nome</th>
-                                                    <th scope="col">Descrição</th>
+                                                    <th scope="col" colspan="3">Descrição</th>
                                                 </tr>
-                                                <tr>
                                                     @foreach (var _skill in skills)
                                                     {
                                                         if (_skill.CharacterId == CharacterService.CharacterData.Id)
@@ -656,15 +660,14 @@
                                                                     }
                                                                 }
                                                                 <td>@_skill.Name</td>
-                                                                <td colspan="3">@_skill.Description</td>
+                                                                <td colspan="3" style="text-align: justify;">@_skill.Description</td>
                                                                 <td>
-                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillUpdate" @onclick="(() => SkillService.SkillData = _skill)">Editar</button>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillUpdate" @onclick="(() => SkillService.SkillSave(_skill))">Editar</button>
                                                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#SkillDelete" @onclick="(() => SaveIdForDelete(_skill.Id))">Deletar</button>
                                                                 </td>
                                                             </tr>
                                                         }
                                                     }
-                                                </tr>
                                                 <br><br>
                                                 <tr>
                                                     <th scope="col" colspan="4" style="text-align: center;">ITENS</th>
@@ -675,9 +678,8 @@
                                                 <tr>
                                                     <th scope="col">Imagem</th>
                                                     <th scope="col">Nome</th>
-                                                    <th scope="col">Descrição</th>
+                                                    <th scope="col" colspan="3">Descrição</th>
                                                 </tr>
-                                                <tr>
                                                     @foreach (var _item in itens)
                                                     {
                                                         if (_item.CharacterId == CharacterService.CharacterData.Id)
@@ -691,15 +693,14 @@
                                                                     }
                                                                 }
                                                                 <td>@_item.Name</td>
-                                                                <td colspan="3">@_item.Description</td>
+                                                                <td colspan="3" style="text-align: justify;">@_item.Description</td>
                                                                 <td>
-                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemUpdate" @onclick="(() => ItemService.ItemData = _item)">Editar</button>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemUpdate" @onclick="(() => ItemService.ItemSave(_item))">Editar</button>
                                                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ItemDelete" @onclick="(() => SaveIdForDelete(_item.Id))">Deletar</button>
                                                                 </td>
                                                             </tr>
                                                         }
                                                     }
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -835,13 +836,13 @@
                                     </div>
                                     <div class="modal-body">
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="newImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="itemname">Nome do Item: </label>
-                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
+                                        <input type="text" class="form-control" @bind="ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
 
                                         <label for="itemdescription">Descrição do Item: </label>
-                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
+                                        <input type="text" class="form-control" @bind="ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
 
 
                                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
@@ -919,14 +920,15 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+
                                         <label for="imageURL">URL da Imagem: </label>
-                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
+                                        <input type="text" class="form-control" @bind="newImageURL" id="imageURL" name="imageURL"> <br>
 
                                         <label for="skillname">Nome da Habilidade: </label>
-                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
 
                                         <label for="skilldescription">Descrição da Habilidade: </label>
-                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
 
 
                                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
@@ -942,7 +944,7 @@
                             <div class="modal-dialog modal-xl ">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="SkillUpdateLabel">Edição de Item</h1>
+                                        <h1 class="modal-title fs-5" id="SkillUpdateLabel">Edição de Habilidade</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
@@ -952,17 +954,17 @@
                                             if (_image.SkillId == SkillService.SkillData.Id)
                                             {
                                                 <label for="imageURL">URL da Imagem: </label>
-                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+                                                <input type="text" class="form-control" @bind="_image.ImageURL" id="imageURL" name="imageURL"> <br>
 
                                                 ImageService.ImageSave(_image);
                                             }
                                         }
 
                                         <label for="skillname">Nome da Habilidade: </label>
-                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
 
                                         <label for="skilldescription">Descrição da Habilidade: </label>
-                                        <input type="text" class="form-control" @bind="@SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
 
 
                                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
@@ -1017,7 +1019,12 @@
 
 @code
 {
-    // Salva todos os dados das tabelas do banco em listas ----------------------------------------------------------------------------
+    // Variáveis utilizadas para evitar erros ----------------------------------------------------------------------------------------
+    public string newImageURL = ""; 
+    /* Por alguma razão o ImageService.ImageData não está sendo resetado no momento certo, então essa 
+    variável vai servir de armazenamento temporário para os URLs das imagens do CREATE SKILL e CREATE ITEM */
+
+    // Salva todos os dados das tabelas do banco em listas ---------------------------------------------------------------------------
     public List<User>? users { get; set; } = new List<User>();
     public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
     public List<Character>? characters { get; set; } = new List<Character>();
@@ -1171,10 +1178,13 @@
         await Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
         itens = await Http.GetFromJsonAsync<List<Item>?>("item");
 
-        if(ImageService.ImageData.ImageURL == null)
-        {
-            ImageService.ImageData.ImageURL = "";
-        }
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
 
         foreach(var _item in itens)
         {
@@ -1185,6 +1195,8 @@
         }
         await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
 
+        newImageURL = "";
+
         Navigation.NavigateTo("/");
     }
 
@@ -1193,11 +1205,14 @@
         SkillService.SkillData.CharacterId = CharacterService.CharacterData.Id;
         await Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
         skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
-
-        if(ImageService.ImageData.ImageURL == null)
-        {
-            ImageService.ImageData.ImageURL = "";
-        }
+        
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
 
         foreach(var _skill in skills)
         {
@@ -1207,6 +1222,8 @@
             }
         }
         await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+
+        newImageURL = "";
 
         Navigation.NavigateTo("/");
     }

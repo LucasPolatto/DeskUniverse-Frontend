@@ -51,22 +51,22 @@
 
                             <br>
                             <button type="button" class="btn btn-primary" @onclick="Voltar">Voltar</button>
-                            <br>
-                            @if (UserService.Id != CampaignService.CampaignData.UserId)
-                            {
-                                <br>
-                                <label for="gameboardURL">URL do Token do personagem: </label>
-                                <input type="text" class="form-control" @bind="TokenService.TokenData.ImageURL" id="gameboardURL" name="gameboardURL">
-                                <button type="button" class="btn btn-primary" @onclick="SavePlayerToken">Salvar</button>
-                                <button type="button" class="btn btn-primary" @onclick="LoadPlayerToken">Carregar</button>
-                                <br>
-                            }
-                            <br>
+                            <br><br>
+
                             <label for="gameboardURL">URL do background: </label>
                             <input type="text" class="form-control" @bind="BoardService.BoardData.BackgroundURL" id="gameboardURL" name="gameboardURL">
                             <button type="button" class="btn btn-primary" @onclick="SaveBackground">Salvar</button>
                             <button type="button" class="btn btn-primary" @onclick="LoadBackground">Carregar</button>
                             <br><br>
+                            
+                            @if (UserService.Id != CampaignService.CampaignData.UserId)
+                            {
+                                <label for="gameboardURL">URL do Token do personagem: </label>
+                                <input type="text" class="form-control" @bind="TokenService.TokenData.ImageURL" id="gameboardURL" name="gameboardURL">
+                                <button type="button" class="btn btn-primary" @onclick="SavePlayerToken">Salvar</button>
+                                <button type="button" class="btn btn-primary" @onclick="LoadPlayerToken">Carregar</button>
+                                <br><br>
+                            }
                             
                             @foreach (var _character in characters)
                                     {
@@ -95,11 +95,11 @@
                             <table class="table" id="gameBoard" align="center" style="width:1%; background: url(@BoardService.BoardData.BackgroundURL) no-repeat left top; background-size: auto;">
                                 <tbody>
 
-                                    @for (y = 25; y > 0; y--)
+                                    @for (y = 15; y > 0; y--)
                                     {
                                         
                                         <tr>
-                                            @for (x = 0; x < 25; x++, Position(x,y))
+                                            @for (x = 0; x < 15; x++, Position(x,y))
                                             {
                                                 <td>
                                                     <div id="@position" style="width: 75px; height: 75px; padding: 1px; border: 0px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
