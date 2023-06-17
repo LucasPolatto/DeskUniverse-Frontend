@@ -1,3 +1,4 @@
+/*
 body {
     height: 100vh;
 }
@@ -118,4 +119,274 @@ nav .container-fluid {
 
 .register label {
     color: white;
+}
+*/
+
+/*-----------------------------------------------------------------------------------------*/
+.Nordic {
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: bold;
+}
+
+div {
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 500;
+}
+
+input::placeholder {
+    font-weight: 100;
+}
+
+.Bold {
+    font-weight: bold;
+}
+
+.Janela-Titulo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.Janela-Sub-Titulo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.Janela-Duas {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* CSS EXCLUSIVO DO MODAL DE EDIÇÃO DA FICHA DE PERSONAGENS */
+.Janela-Personagem-Ficha div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.Janelas-Personagem-Descricao {
+    flex-direction: column;
+}
+
+.Janelas-Personagem-Historia {
+    flex-direction: column;
+}
+
+.Janela-Personagem-Estatistica {
+    display: flex;
+}
+
+.Janela-Personagem-Atributos {
+    display: flex;
+    flex-direction: column;
+}
+
+.Janela-Personagem-Atributos-Statistica {
+    display: flex;
+}
+
+.Janela-Personagem-Atributos div {
+    display: flex;
+    justify-content: center;
+}
+
+.Janela-Personagem-Atributos-Nome {
+    display: flex;
+    flex-direction: column;
+    justify-content: start !important;
+}
+
+.Janela-Personagem-Atributos-Nome2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+}
+
+.Janela-Personagem-Atributos-Nome2 div {
+    display: flex;
+    justify-content: center !important;
+}
+
+.teste {
+    display: flex;
+    justify-content: center;
+}
+
+.Janela-Personagem-Items {
+    margin-bottom: 2rem;
+}
+
+/* MODAL EXCLUSIVO PARA TELA DE CRIAÇÃO DE PERSONAGENS*/
+
+.Janela-Criacao-Personagem-Form {
+    display: flex;
+}
+
+.Janela-Criacao-Personagem-Form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.Janela-Criacao-Personagem-Form-Estatistica {
+    flex-direction: row !important;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Janela-Criacao-Personagem-Form-Estatistica label {
+    display: flex;
+    justify-content: center;
+}
+
+.Janela-Criacao-Personagem-Form-Btns {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row !important;
+    margin-top: 2rem;
+}
+
+/* MODAL PARA CRIAÇÃO DE HABILIDADE*/
+.Janela-Criacao-Habilidade-Form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.Janela-Criacao-Habilidade-Form div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Janela-Criacao-Habilidade-Form div label {
+    display: flex;
+    justify-content: center;
+}
+
+.Janela-Criacao-Habilidade-Form-Btns {
+    display: flex;
+    justify-content: space-evenly !important;
+    flex-direction: row !important;
+    margin-top: 2rem;
+}
+
+/*MODAL PARA CAMPANHA*/
+
+.Janela-Campanha {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Janela-Minhas-Campanhas {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 2rem;
+}
+
+.Janela-Campanha-Form div {
+    display: flex;
+    align-items: center;
+}
+
+.Janela-Campanha-Form-Title div {
+    font-weight: bold;
+}
+
+.Janela-Campanha-Visualizar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.Janela-Campanha-Title div {
+    font-weight: bold;
+}
+
+.Janela-Modal-Personagem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+}
+
+.Janela-Personagem-Habilidades-Title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.Janela-Personagem-Items-Title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.Janela-Personagem-Ficha-Title {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.Janela-Personagem-Atributos-Status {
+    display: flex;
+    flex-direction: row;
+}
+
+.Janela-Personagem-Estatistica-Atributos {
+    display: flex;
+    justify-content: space-around;
+}
+
+.Janela-Personagem-Habilidades-Btns{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Janela-Personagem-Habilidades-Btns button{
+    width: 75%;
+}
+
+.Janela-Personagem-Items-Btns{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Janela-Personagem-Items-Btns button{
+    width: 75%;
+}
+
+.Janela-Exclusao{
+    display: flex;
+    justify-content: space-around;
+}
+
+.Janela-Personagem-Ficha-Img{
+    display: flex;
+    justify-content: center;
+}
+.Janela-Personagem-Ficha-Img img{
+    width: 10rem;
+}
+
+.Janela-Personagem b{
+    margin-right: 1rem;
 }

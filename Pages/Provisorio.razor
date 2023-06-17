@@ -1,0 +1,1483 @@
+@page "/Home"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject UserService UserService
+@inject CharacterService CharacterService
+@inject CampaignService CampaignService
+@inject ItemService ItemService
+@inject SkillService SkillService
+@inject ImageService ImageService
+@inject BoardService BoardService
+@inject TokenService TokenService
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        p {
+            text-align: justify;
+        }
+    </style>
+    
+</head>
+
+
+<body>
+    @if (UserService.Logado == true)
+    {
+        <section class="HOME">
+            <!-- MODAL DE EXCLUSÃO DE CAMPANHA -->
+        <div class="modal fade" id="exampleModalCloseCampaign" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCloseCampaign"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <h3 class="Janela-Titulo Nordic">Confirmação de exclusão</h3>
+
+                        <div class="container">
+                            <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
+                        </div>
+                        <div class="Janela-Exclusao">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">Cancelar</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteCampaign(IdForDelete))">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE EXCLUSÃO DE PERSONAGEM -->
+        <div class="modal fade" id="exampleModalCloseCharacter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCloseCharacter"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <h3 class="Janela-Titulo Nordic">Confirmação de exclusão</h3>
+
+                        <div class="container">
+                            <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
+                        </div>
+                        <div class="Janela-Exclusao">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">Cancelar</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteCharacter(IdForDelete))">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE EXCLUSÃO DE SKILL -->
+        <div class="modal fade" id="exampleModalCloseSkill" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCloseSkill"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <h3 class="Janela-Titulo Nordic">Confirmação de exclusão</h3>
+
+                        <div class="container">
+                            <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
+                        </div>
+                        <div class="Janela-Exclusao">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">Cancelar</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteSkill(IdForDelete))">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE EXCLUSÃO DE ITEM -->
+        <div class="modal fade" id="exampleModalCloseItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCloseItem"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <h3 class="Janela-Titulo Nordic">Confirmação de exclusão</h3>
+
+                        <div class="container">
+                            <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
+                        </div>
+                        <div class="Janela-Exclusao">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">Cancelar</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteItem(IdForDelete))">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Modal VISUALIZAÇÃO FICHA DE PERSONAGEM -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content Janela-Personagem">
+                        <div class="modal-body">
+
+                            <div class="Janela-Personagem-Ficha-Title">
+                                <h2 class="Janela-Titulo Nordic">Ficha do personagem</h2>
+                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal2">Editar</button>
+                            </div>
+
+                            <div class="Janela-Duas">
+                                <div><b>Jogador: </b> @IdForUserName(CharacterService.CharacterData.UserId)</div>
+                                <div><b>Campanha: </b> @CharacterService.CharacterData.CampaignId</div>
+                            </div>
+
+                            <h4 class="Janela-Titulo Nordic">Identificação do personagem</h4>
+                            @foreach (var _image in images)
+                            {
+                                if (_image.CharacterId == CharacterService.CharacterData.Id)
+                                {
+                                    <div class="Janela-Personagem-Ficha-Img"><img
+                                            src="@_image.ImageURL"
+                                            alt=""></div>
+                                }
+                            }
+                            <div class="Janela-Personagem-Ficha row">
+                                <div class="col-6"><b>Nome: </b>@CharacterService.CharacterData.Name</div>
+                                <div class="col-6"><b>Raça: </b> @CharacterService.CharacterData.Race</div>
+                                <div class="col-6"><b>Gênero: </b> @CharacterService.CharacterData.Gender</div>
+                                <div class="col-6"><b>Idade: </b> @CharacterService.CharacterData.Age</div>
+                                <div class="col-6"><b>Classe: </b> @CharacterService.CharacterData.Class</div>
+                                <div class="col-6"><b>Nível: </b> @CharacterService.CharacterData.Level</div>
+                                <div class="col-12 Janelas-Personagem-Descricao">
+                                    <div>
+                                        <h5 class="Nordic">Descrição</h5>
+                                    </div>
+                                    <div>
+                                        <p>@CharacterService.CharacterData.Description</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 Janelas-Personagem-Historia">
+                                    <div>
+                                        <h5 class="Nordic">História</h5>
+                                    </div>
+                                    <div>
+                                        <p>@CharacterService.CharacterData.History</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="Janela-Titulo Nordic">Estatística</h4>
+                            <div class="row Janela-Personagem-Estatistica row">
+                                <div class="col-9">
+                                    <div class="col-12">
+                                        <h5 class="Nordic Janela-Sub-Titulo">Atributos</h5>
+                                    </div>
+                                    <div class="Janela-Personagem-Estatistica-Atributos">
+                                        <div class="col-5 ">
+                                            <div class="col-12  Janela-Personagem-Atributos-Statistica">
+                                                <div class="col-6 Janela-Personagem-Atributos-Nome">
+                                                    <div>Vida</div>
+                                                    <div class="mb-3">Mana</div>
+                                                    <div>DEF Física</div>
+                                                    <div>DEF Mágica</div>
+                                                </div>
+                                                <div class="col-6 Janela-Personagem-Atributos-Nome2">
+                                                    <div>@CharacterService.CharacterData.Health</div>
+                                                    <div class="mb-3">@CharacterService.CharacterData.Mana</div>
+                                                    <div>@CharacterService.CharacterData.PD</div>
+                                                    <div>@CharacterService.CharacterData.MD</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="Janela-Personagem-Atributos-Status">
+                                                <div class="col-8">
+                                                    <div>Força</div>
+                                                    <div>Destreza</div>
+                                                    <div>Constituição</div>
+                                                    <div>Inteligência</div>
+                                                    <div>Sabedoria</div>
+                                                    <div>Carisma</div>
+                                                    <div>Vontade</div>
+                                                </div>
+                                                <div class="Janela-Personagem-Atributos col-4">
+                                                    <div>@CharacterService.CharacterData.STR</div>
+                                                    <div>@CharacterService.CharacterData.DEX</div>
+                                                    <div>@CharacterService.CharacterData.CON</div>
+                                                    <div>@CharacterService.CharacterData.INT</div>
+                                                    <div>@CharacterService.CharacterData.WIS</div>
+                                                    <div>@CharacterService.CharacterData.CHA</div>
+                                                    <div>@CharacterService.CharacterData.WIL</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div>
+                                        <h5 class="Nordic Janela-Sub-Titulo">Modificador</h5>
+                                    </div>
+                                    <div class="Janela-Personagem-Atributos">
+                                        <div>@CheckModifier(CharacterService.CharacterData.STR)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.DEX)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.CON)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.INT)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.WIS)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.CHA)</div>
+                                        <div>@CheckModifier(CharacterService.CharacterData.WIL)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="Janela-Personagem-Habilidades-Title">
+                            <h4 class="Nordic">Habilidades</h4>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal4">Criar Habilidade</button>
+                        </div>
+                        <div class="Janela-Personagem-Habilidades">
+
+                            <div class="container">
+                                <table class="w-100">
+                                    <tr>
+                                        <th style="width:10%">Imagem</th>
+                                        <th style="width:35%">Nome</th>
+                                        <th style="width:35%">Descrição</th>
+                                        <th style="width:20%" class="d-flex m-auto">Ações</th>
+                                    </tr>
+                                    <tr>
+                                        @foreach (var _skill in skills)
+                                        {
+                                            if (_skill.CharacterId == CharacterService.CharacterData.Id)
+                                            {
+                                                foreach (var _image in images)
+                                                {
+                                                    if (_image.SkillId == _skill.Id)
+                                                    {
+                                                        <td><img src="@_image.ImageURL" alt="" width="100%"></td>
+                                                    }
+                                                }
+                                                
+                                                <td>@_skill.Name</td>
+                                                <td>
+                                                    <textarea readonly>@_skill.Description</textarea>
+                                                </td>
+                                                <td class="Janela-Personagem-Habilidades-Btns">
+                                                    <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal5">Editar</button>
+                                                    <button class="btn btn-danger">Excluir</button>
+                                                </td>
+                                            }
+                                        }
+                                        
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="Janela-Personagem-Items-Title">
+                            <h4 class="Nordic">Items</h4>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal6">Criar Item</button>
+                        </div>
+                        <div class="Janela-Personagem-Items">
+                            <div class="container">
+                                <table class="w-100">
+                                    <tr>
+                                        <th style="width:10%">Imagem</th>
+                                        <th style="width:35%">Nome</th>
+                                        <th style="width:35%">Descrição</th>
+                                        <th style="width:20%" class="d-flex m-auto">Ações</th>
+                                    </tr>
+                                    <tr>
+                                        @foreach (var _item in itens)
+                                        {
+                                            if (_item.CharacterId == CharacterService.CharacterData.Id)
+                                            {
+                                                foreach (var _image in images)
+                                                {
+                                                    if (_image.ItemId == _item.Id)
+                                                    {
+                                                        <td><img src="@_image.ImageURL" alt="" width="100%"></td>
+                                                    }
+                                                }
+                                                <td>@_item.Name</td>
+                                                <td><textarea readonly>@_item.Description</textarea></td>
+                                                <td class="Janela-Personagem-Items-Btns">
+                                                    <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal7">Editar</button>
+                                                    <button class="btn btn-danger">Excluir</button>
+                                                </td>
+                                            }
+                                        }
+                                        
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal EDIÇÃO FICHA DE PERSONAGEM -->
+            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Edicao da ficha de personagem</h2>
+                        </div>
+
+                        <div class="container" style="margin-bottom: 2rem;">
+                            <form action="" class="Janela-Criacao-Personagem-Form row">
+
+                                <h4 class="Janela-Titulo Nordic">Identificação</h4>
+
+                                <div class="col-3">
+                                    <label for="">Imagem</label>
+                                    <input type="text" placeholder="Url da imagem">
+                                </div>
+                                <div class="col-2">
+                                    <label for="">Campanha</label>
+                                    <input type="text" placeholder="ID">
+                                </div>
+                                <div class="col-7">
+                                    <label for="">Nome do personagem</label>
+                                    <input type="text" placeholder="Escolha um nome para o personagem">
+                                </div>
+                                <div class="col-3">
+                                    <label for="">Raça</label>
+                                    <input type="text" placeholder="Escolha uma raça">
+                                </div>
+                                <div class="col-3">
+                                    <label for="">Gênero</label>
+                                    <input type="text" placeholder="Escolha um gênero ">
+                                </div>
+                                <div class="col-4">
+                                    <label for="">Classe</label>
+                                    <input type="text" placeholder="Escolha uma classe">
+                                </div>
+                                <div class="col-2">
+                                    <label for="">Idade</label>
+                                    <input type="text" placeholder="Idade">
+                                </div>
+                                <div class="col-12">
+                                    <label for="">Descrição do personagem</label>
+                                    <textarea placeholder="Descreva seu personagem"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label for="">História do personagem</label>
+                                    <textarea placeholder="Digite a história do personagem"></textarea>
+                                </div>
+
+                                <h4 class="Janela-Titulo Nordic">Estatísticas</h4>
+                                <div class="col-6">
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">Nível</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">Vida</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">Mana</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">DEF Física</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">DEF Mágica</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">STR</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">DEX</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">CON</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">INT</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">WIS</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">CHA</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+
+                                        <div class="col-2">
+                                            <label for="">WILL</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="Janela-Criacao-Personagem-Form-Btns row">
+                                    <button class="btn btn-danger col-2">Cancelar</button>
+                                    <button class="btn btn-success col-2">Confirmar</button>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL CRIAÇÃO DE PERSONAGENS -->
+            <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Criação de personagem</h2>
+                        </div>
+
+                        <div class="container" style="margin-bottom: 2rem;">
+                            <form action="" class="Janela-Criacao-Personagem-Form row">
+
+                                <h4 class="Janela-Titulo Nordic">Identificação</h4>
+
+                                <div class="col-3">
+                                    <label for="">Imagem</label>
+                                    <input type="text" placeholder="Url da imagem">
+                                </div>
+                                <div class="col-2">
+                                    <label for="">Campanha</label>
+                                    <input type="text" placeholder="ID">
+                                </div>
+                                <div class="col-7">
+                                    <label for="">Nome do personagem</label>
+                                    <input type="text" placeholder="Escolha um nome para o personagem">
+                                </div>
+                                <div class="col-3">
+                                    <label for="">Raça</label>
+                                    <input type="text" placeholder="Escolha uma raça">
+                                </div>
+                                <div class="col-3">
+                                    <label for="">Gênero</label>
+                                    <input type="text" placeholder="Escolha um gênero ">
+                                </div>
+                                <div class="col-4">
+                                    <label for="">Classe</label>
+                                    <input type="text" placeholder="Escolha uma classe">
+                                </div>
+                                <div class="col-2">
+                                    <label for="">Idade</label>
+                                    <input type="text" placeholder="Idade">
+                                </div>
+                                <div class="col-12">
+                                    <label for="">Descrição do personagem</label>
+                                    <textarea placeholder="Descreva seu personagem"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label for="">História do personagem</label>
+                                    <textarea placeholder="Digite a história do personagem"></textarea>
+                                </div>
+
+                                <h4 class="Janela-Titulo Nordic">Estatísticas</h4>
+                                <div class="col-6">
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">Nível</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">Vida</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">Mana</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">DEF Física</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">DEF Mágica</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">STR</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">DEX</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">CON</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+                                        <div class="col-2">
+                                            <label for="">INT</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">WIS</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="">CHA</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 Janela-Criacao-Personagem-Form-Estatistica">
+
+                                        <div class="col-2">
+                                            <label for="">WILL</label>
+                                            <input type="text" name="" id="">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                        <div class="col-2">
+                                            <label for=""></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="Janela-Criacao-Personagem-Form-Btns row">
+                                    <button class="btn btn-danger col-2">Cancelar</button>
+                                    <button class="btn btn-success col-2">Confirmar</button>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL CRIAÇÃO DE HABILIDADE -->
+            <div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Criação de habilidade</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-10">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome da habilidade">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label for="">Descrição</label>
+                                        <textarea placeholder="Descrição da habilidade"></textarea>
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL EDIÇÃO DE HABILIDADE -->
+            <div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel5"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Edição de habilidade</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-10">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome da habilidade">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label for="">Descrição</label>
+                                        <textarea placeholder="Descrição da habilidade"></textarea>
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL CRIAÇÃO DE ITEMS -->
+            <div class="modal fade" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Criação de items</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-10">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome do item">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label for="">Descrição</label>
+                                        <textarea placeholder="Descrição do item"></textarea>
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL EDIÇÃO DE ITEMS -->
+            <div class="modal fade" id="exampleModal7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel7"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Edição de items</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-10">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome do item">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label for="">Descrição</label>
+                                        <textarea placeholder="Descrição do item"></textarea>
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL CRIAÇÃO DE CAMPANHA -->
+            <div class="modal fade" id="exampleModal8" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel8"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Criação de campanha</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome da campanha">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="">Data</label>
+                                        <input type="text" placeholder="Data">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="">Horário</label>
+                                        <input type="text" placeholder="Horário">
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL EDIÇÃO DE CAMPANHA -->
+            <div class="modal fade" id="exampleModal9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel9"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Edição de campanha</h2>
+
+                            <div class="container" style="margin-bottom: 2rem;">
+                                <form action="" class="Janela-Criacao-Habilidade-Form row">
+                                    <div class="col-2">
+                                        <label for="">Imagem</label>
+                                        <input type="text" placeholder="Url Imagem">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">Nome</label>
+                                        <input type="text" placeholder="Nome da Campanha">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="">Data</label>
+                                        <input type="text" placeholder="Data">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="">Horário</label>
+                                        <input type="text" placeholder="Horário">
+                                    </div>
+                                    <div class="Janela-Criacao-Habilidade-Form-Btns row">
+                                        <button class="btn btn-danger col-2">Cancelar</button>
+                                        <button class="btn btn-success col-2">Confirmar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL VISUALIZAÇÃO CAMPANHA-->
+            <div class="modal fade" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel10"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body Janela-Campanha-Visualizar-Title">
+                            <div class="row Janela-Campanha-Visualizar">
+                                <div class="col-4">
+                                    <h2 class="Nordic">Campanha:</h2>
+                                </div>
+                                <div class="col-4 Bold">Nome campanha</div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal9">Editar</button>
+                                    <button class="btn btn-success">Jogar</button>
+                                </div>
+                            </div>
+                            <div class="row Janela-Campanha-Title">
+                                <div class="col-2">Imagem</div>
+                                <div class="col-4">Mestre</div>
+                                <div class="col-2">Campanha</div>
+                                <div class="col-2">Data</div>
+                                <div class="col-2">Horario</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Teste</div>
+                                <div class="col-4">Leonardo</div>
+                                <div class="col-2">1</div>
+                                <div class="col-2">17/05/2023</div>
+                                <div class="col-2">15:30</div>
+                            </div>
+                            <h4 class="Janela-Titulo Nordic">Participantes</h4>
+                            <div class="row Janela-Campanha-Title">
+                                <div class="col-2">Imagem</div>
+                                <div class="col-2">Personagem</div>
+                                <div class="col-2">Classe</div>
+                                <div class="col-2">Nível</div>
+                                <div class="col-2">Jogador</div>
+                                <div class="col-2"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Teste</div>
+                                <div class="col-2">Zero</div>
+                                <div class="col-2">Lutador</div>
+                                <div class="col-2">10</div>
+                                <div class="col-2">Leonardo</div>
+                                <div class="col-2">
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal1">Visualizar</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - -->
+            <!-- BTN MODAL CAMPANHA -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCampanha">
+                Campanha
+            </button>
+            <!-- MODAL CAMPANHA -->
+            <div class="modal fade" id="exampleModalCampanha" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabelCampanha" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <h2 class="Janela-Titulo Nordic">Campanhas</h2>
+
+                            <div class="Janela-Campanha">
+                                <h4 class="Nordic">Campanhas</h4>
+                                <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal8">Criar campanha</button>
+                            </div>
+                            <div class="Janela-Campanha-Form">
+                                <div class="row Janela-Campanha-Form-Title">
+                                    <div class="col-1">Imagem</div>
+                                    <div class="col-1">ID</div>
+                                    <div class="col-2">Mestre</div>
+                                    <div class="col-2">Campanha</div>
+                                    <div class="col-1">Data</div>
+                                    <div class="col-1">Hora</div>
+                                    <div class="col-4"></div>
+                                </div>
+                                @foreach (var _campaign in campaigns)
+                                {
+                                    if (_campaign.UserId == UserService.Id)
+                                    {
+                                        <div class="row">
+                                            @foreach (var _image in images)
+                                            {
+                                                if (_image.CampaignId == _campaign.Id)
+                                                {
+                                                    <div class="col-1"><img style="width: 100%" src="@_image.ImageURL"></div>
+                                                }
+                                            }
+                                            <div class="col-1">@_campaign.Id</div>
+                                            <div class="col-2">@IdForUserName(_campaign.UserId)</div>
+                                            <div class="col-2">@_campaign.Name</div>
+                                            <div class="col-1">@_campaign.SessionDate</div>
+                                            <div class="col-1">@_campaign.SessionHour</div>
+                                            <div class="col-4">
+                                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal10">Visualizar</button>
+                                                <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal9">Editar</button>
+                                                <button class="btn btn-danger">Excluir</button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+
+                            <div class="Janela-Minhas-Campanhas">
+                                <h4 class="Nordic">Campanhas que participo</h4>
+                            </div>
+                            <div class="Janela-Campanha-Form">
+                                <div class="row Janela-Campanha-Form-Title">
+                                    <div class="col-1">Imagem</div>
+                                    <div class="col-1">ID</div>
+                                    <div class="col-2">Mestre</div>
+                                    <div class="col-2">Campanha</div>
+                                    <div class="col-2">Personagem</div>
+                                    <div class="col-1">Data</div>
+                                    <div class="col-1">Hora</div>
+                                    <div class="col-2"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-1">Imagem teste</div>
+                                    <div class="col-1">1</div>
+                                    <div class="col-2">Leonardo</div>
+                                    <div class="col-2">Aventura doida</div>
+                                    <div class="col-2">Personagem</div>
+                                    <div class="col-1">17/06/2023</div>
+                                    <div class="col-1">15:30</div>
+                                    <div class="col-2">
+                                        <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                            data-bs-target="">Jogar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!--PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM --->
+
+            <!-- BTN PERSONAGEM-->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPersonagem">
+                Personagem
+            </button>
+            <!-- MODAL PERSONAGEM-->
+            <div class="modal fade" id="exampleModalPersonagem" tabindex="-1" role="dialog" data-bs-backdrop="static"
+                aria-labelledby="exampleModalLabelPersonagem" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="Janela-Modal-Personagem">
+                                <h2 class="Nordic">Personagem</h2>
+                                <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal3">Criar</button>
+                            </div>
+                            <div class="Janela-Campanha-Form">
+                                <div class="row Janela-Campanha-Form-Title">
+                                    <div class="col-2">Imagem</div>
+                                    <div class="col-3">Nome</div>
+                                    <div class="col-2">Classe</div>
+                                    <div class="col-1">Nível</div>
+                                    <div class="col-4"></div>
+                                </div>
+                                
+                                @foreach (var _character in characters)
+                                {
+                                    if (_character.UserId == UserService.Id)
+                                    {
+                                        <div class="row">
+                                            @foreach (var _image in images)
+                                            {
+                                                if (_image.CharacterId == _character.Id)
+                                                {
+                                                    <div class="col-2"><img style="width: 100%" src="@_image.ImageURL"></div>
+                                                }
+                                            }
+                                            <div class="col-3">@_character.Name</div>
+                                            <div class="col-2">@_character.Class</div>
+                                            <div class="col-1">@_character.Level</div>
+                                            <div class="col-4">
+                                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal1" @onclick="(() => CharacterService.CharacterSave(_character))">Visualizar</button>
+                                                <button class="btn btn-danger" data-bs-target="#exampleModalCloseCharacter" @onclick="(() => SaveIdForDelete(_character.Id))">Excluir</button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BTN GUIA-->
+            <button type="button" class="btn btn-primary" href="/RPG Guide/DeskUniverse v0.5.pdf" target="_blank">
+                Guia
+            </button>
+        </section>
+    }
+    else{Navigation.NavigateTo("/Login");}
+</body>
+
+</html>
+
+@code
+{
+    // Variáveis utilizadas para evitar erros ----------------------------------------------------------------------------------------
+    public string newImageURL = ""; 
+    /* Por alguma razão o ImageService.ImageData não está sendo resetado no momento certo, então essa 
+    variável vai servir de armazenamento temporário para os URLs das imagens do CREATE SKILL e CREATE ITEM */
+
+    // Salva todos os dados das tabelas do banco em listas ---------------------------------------------------------------------------
+    public List<User>? users { get; set; } = new List<User>();
+    public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
+    public List<Character>? characters { get; set; } = new List<Character>();
+    public List<Skill>? skills { get; set; } = new List<Skill>();
+    public List<Item>? itens { get; set; } = new List<Item>();
+    public List<Image>? images { get; set; } = new List<Image>();
+    public List<Board>? boards { get; set; } = new List<Board>();
+    public List<Token>? tokens { get; set; } = new List<Token>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ResetCampaignData();
+        ResetCharacterData();
+        ResetSkillData();
+        ResetItemData();
+        users = await Http.GetFromJsonAsync<List<User>?>("user");
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+        skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
+        itens = await Http.GetFromJsonAsync<List<Item>?>("item");
+        images = await Http.GetFromJsonAsync<List<Image>?>("image");
+        boards = await Http.GetFromJsonAsync<List<Board>?>("board");
+        tokens = await Http.GetFromJsonAsync<List<Token>?>("token");
+    }
+
+    // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
+    public string? username;
+    public string IdForUserName(int Id)
+    {
+        username = null;
+        
+        foreach(var _user in users)
+        {
+            if(Id == _user.Id)
+            {
+                username = _user.Username;
+            }
+        }
+
+        return(username);
+    }
+
+    // Recebe o ID da campanha e devolve seu nome -------------------------------------------------------------------------------------
+    public string? campaignname;
+    public string IdForCampaignName(int? Id)
+    {
+        campaignname = null;
+
+        foreach(var _campaign in campaigns)
+        {
+            if(Id == _campaign.Id)
+            {
+                campaignname = _campaign.Name;
+            }
+        }
+
+        return(campaignname);
+
+    }
+
+    //Funções para resetar os dados das variáveis dos serviços-------------------------------------------------------------------------
+    public void ResetCharacterData()
+    {
+        CharacterService.CharacterData = new Character();
+        ImageService.ImageData = new Image();
+        TokenService.TokenData = new Token();
+    }
+
+    public void ResetCampaignData()
+    {
+        CampaignService.CampaignData = new Campaign();
+        ImageService.ImageData = new Image();
+        BoardService.BoardData = new Board();
+    }
+
+    public void ResetItemData()
+    {
+        ItemService.ItemData = new Item();
+        ImageService.ImageData = new Image();
+    }
+
+    public void ResetSkillData()
+    {
+        SkillService.SkillData = new Skill();
+        ImageService.ImageData = new Image();
+    }
+
+    // Funções para realizar a operação de Create (Post) ------------------------------------------------------------------------------
+    public async void CreateCharacter()
+    {
+        CharacterService.CharacterData.UserId = UserService.Id;
+        await Http.PostAsJsonAsync<Character>("character", CharacterService.CharacterData);
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
+        foreach(var _character in characters)
+        {
+            if(_character.UserId == CharacterService.CharacterData.UserId && _character.Name == CharacterService.CharacterData.Name)
+            {
+                ImageService.ImageData.CharacterId = _character.Id;
+                
+                TokenService.TokenData.CharacterId = _character.Id;
+                TokenService.TokenData.CampaignId = _character.CampaignId;
+                TokenService.TokenData.ImageURL = "/img/token.png";
+                TokenService.TokenData.Position = "";
+                TokenService.TokenData.Health = _character.Health;
+                TokenService.TokenData.Mana = _character.Mana;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Token>("token", TokenService.TokenData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateCampaign()
+    {
+        CampaignService.CampaignData.UserId = UserService.Id;
+        await Http.PostAsJsonAsync<Campaign>("campaign", CampaignService.CampaignData);
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
+        foreach(var _campaign in campaigns)
+        {
+            if(_campaign.UserId == CampaignService.CampaignData.UserId && _campaign.Name == CampaignService.CampaignData.Name)
+            {
+                ImageService.ImageData.CampaignId = _campaign.Id;
+                
+                BoardService.BoardData.CampaignId = _campaign.Id;
+                BoardService.BoardData.Name = _campaign.Name;
+                BoardService.BoardData.BackgroundURL = "";
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Board>("board", BoardService.BoardData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateItem()
+    {
+        ItemService.ItemData.CharacterId = CharacterService.CharacterData.Id;
+        await Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
+        itens = await Http.GetFromJsonAsync<List<Item>?>("item");
+
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
+
+        foreach(var _item in itens)
+        {
+            if(_item.CharacterId == ItemService.ItemData.CharacterId && _item.Name == ItemService.ItemData.Name)
+            {
+                ImageService.ImageData.ItemId = _item.Id;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+
+        newImageURL = "";
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateSkill()
+    {
+        SkillService.SkillData.CharacterId = CharacterService.CharacterData.Id;
+        await Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
+        skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
+        
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
+
+        foreach(var _skill in skills)
+        {
+            if(_skill.CharacterId == SkillService.SkillData.CharacterId && _skill.Name == SkillService.SkillData.Name)
+            {
+                ImageService.ImageData.SkillId = _skill.Id;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+
+        newImageURL = "";
+
+        Navigation.NavigateTo("/");
+    }
+
+    // Funções para realizar a operação de Update (Put) -------------------------------------------------------------------------------
+    public void UpdateCharacter()
+    {
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+                TokenService.TokenData.CampaignId = CharacterService.CharacterData.CampaignId;
+            }
+        }
+
+        Http.PutAsJsonAsync<Character>($"character/{CharacterService.CharacterData.Id}", CharacterService.CharacterData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Http.PutAsJsonAsync<Token>($"token/{TokenService.TokenData.Id}", TokenService.TokenData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateCampaign()
+    {
+        Http.PutAsJsonAsync<Campaign>($"campaign/{CampaignService.CampaignData.Id}", CampaignService.CampaignData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateItem()
+    {
+        Http.PutAsJsonAsync<Item>($"item/{ItemService.ItemData.Id}", ItemService.ItemData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateSkill()
+    {
+        Http.PutAsJsonAsync<Skill>($"skill/{SkillService.SkillData.Id}", SkillService.SkillData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    // Funções para realizar a operação de Delete -------------------------------------------------------------------------------------
+    public int IdForDelete;
+
+    public void SaveIdForDelete(int id)
+    {
+        IdForDelete = id;
+    }
+    
+    public void DeleteCharacter(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"character/{id}");
+
+        foreach (var _image in images)
+        {
+            if(_image.CharacterId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        foreach (var _item in itens)
+        {
+            if(_item.CharacterId == id)
+            {
+                DeleteItem(_item.Id);
+            }
+        }
+
+        foreach (var _skill in skills)
+        {
+            if(_skill.CharacterId == id)
+            {
+                DeleteSkill(_skill.Id);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if(_token.CharacterId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"token/{_token.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteCampaign(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"campaign/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.CampaignId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        foreach (var _board in boards)
+        {
+            if(_board.CampaignId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"board/{_board.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteItem(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"item/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.ItemId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteSkill(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"skill/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.SkillId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    // Verifica o valor do modificador do status do personagem ------------------------------------------------------------------------
+    public double modifier = 0;
+    public int modCounter = 0;
+    public string modifierText;
+
+    public string CheckModifier(int? status)
+    {
+        modifier = 0;
+        modCounter = 0;
+
+        while (status >= modCounter)
+        {
+            modifier = (modCounter / 2) - 5;
+            modifier = Math.Round(modifier);
+            modCounter = modCounter + 1;
+        }
+
+        if (modifier >= 0)
+        {
+            modifierText = $"+{modifier}";
+        }
+        else
+        {
+            modifierText = $"{modifier}";
+        }
+
+        return(modifierText);
+    }
+
+    // Abre o tabuleiro da campanha -------------------------------------------------------------------------------------------------
+    public void Play(int id)
+    {
+        foreach (var _campaign in campaigns)
+        {
+            if (_campaign.Id == id)
+            {
+                CampaignService.CampaignSave(_campaign);
+            }
+        }
+
+        foreach (var _character in characters)
+        {
+            if (_character.CampaignId == id && _character.UserId == UserService.Id)
+            {
+                CharacterService.CharacterSave(_character);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+            }
+        }
+
+        foreach (var _board in boards)
+        {
+            if (_board.CampaignId == id)
+            {
+                BoardService.BoardSave(_board);
+                
+                BoardService.Playing = true;
+
+                Navigation.NavigateTo("/Play");
+            }
+        }
+    }
+}
