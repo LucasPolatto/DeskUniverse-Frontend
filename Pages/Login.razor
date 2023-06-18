@@ -50,6 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(500);
         users = await Http.GetFromJsonAsync<List<User>?>("user");
     }
 

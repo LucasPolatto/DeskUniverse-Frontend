@@ -1,0 +1,1439 @@
+@page "/ANTIGO"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using DeskUniverse_Frontend.Models
+@inject UserService UserService
+@inject CharacterService CharacterService
+@inject CampaignService CampaignService
+@inject ItemService ItemService
+@inject SkillService SkillService
+@inject ImageService ImageService
+@inject BoardService BoardService
+@inject TokenService TokenService
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>Document</title>
+        <link rel="stylesheet" href="css/style.css">
+
+        <style>
+            label 
+            {
+                color: white;
+            }
+
+            td, th
+            {
+                text-align: center;
+            }
+
+            h1, h2, h3, h4, h5 
+            {
+                color: white;
+            }
+        </style>
+
+    </head>
+    <body>
+        @if (UserService.Logado == true)
+        {
+            <div class="body">
+
+                <section class="container">
+                    <div class="row">
+
+                        <!-- Card das campanhas -->
+                        <div class="card col" style="width: 18rem;">
+                            <a data-bs-toggle="modal" data-bs-target="#Campaigns">
+                                <img src="/img/campaigns.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">Campanhas</h5>
+                                    <p class="card-text">Gerencie suas campanhas</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Modal de exibição resumida de campanhas -->
+                        <div class="modal fade" id="Campaigns" tabindex="-1" aria-labelledby="CampaignsLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignsLabel">Campanhas</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignCreate" @onclick="ResetCampaignData">Criar campanha</button>
+                                        <table class="table">
+                                            <thead>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col" colspan="4">Minhas Campanhas</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Mestre</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <th scope="col">Hora da sessão</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _campaign in campaigns)
+                                                {
+                                                    @if (_campaign.UserId == UserService.Id)
+                                                    {
+                                                        <tr>
+                                                            @foreach (var _image in images)
+                                                            {
+                                                                if (_image.CampaignId == _campaign.Id)
+                                                                {
+                                                                    <td><img src="@_image.ImageURL" style="width:50px;height:50px;"></td>
+                                                                }
+                                                            }
+                                                            <td>@_campaign.Id</td>
+                                                            <td>@IdForUserName(_campaign.UserId)</td>
+                                                            <td>@_campaign.Name</td>
+                                                            <td>@_campaign.SessionDate</td>
+                                                            <td>@_campaign.SessionHour</td>
+                                                            <td>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignView" @onclick="(() => CampaignService.CampaignSave(_campaign))">Visualizar</button>
+                                                                
+                                                                <!-- Botão para Jogar -->
+                                                                <button class="btn btn-success" @onclick="(()=> Play(_campaign.Id))" data-bs-dismiss="modal">Jogar</button>
+
+                                                                <!-- Botão de Delete de campanha -->
+                                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CampaignDelete" @onclick="(() => SaveIdForDelete(_campaign.Id))">Deletar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4">Campanhas que Participo</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Mestre</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Personagem</th>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <th scope="col">Hora da sessão</th>
+                                                </tr>
+                                                <tr>
+                                                    @foreach (var _character in characters)
+                                                    {
+                                                        if (_character.UserId == UserService.Id)
+                                                        {
+                                                            foreach (var _campaign in campaigns)
+                                                            {
+                                                                if (_campaign.Id == _character.CampaignId)
+                                                                {
+                                                                    foreach (var _image in images)
+                                                                    {
+                                                                        if (_image.CampaignId == _campaign.Id)
+                                                                        {
+                                                                            <td><img src="@_image.ImageURL" style="width:50px;height:50px;"></td>
+                                                                        }
+                                                                    }
+                                                                    <td>@_campaign.Id</td>
+                                                                    <td>@IdForUserName(_campaign.UserId)</td>
+                                                                    <td>@_campaign.Name</td>
+                                                                    <td>@_character.Name</td>
+                                                                    <td>@_campaign.SessionDate</td>
+                                                                    <td>@_campaign.SessionHour</td>
+                                                                    <td>
+                                                                        <!-- Botão para Jogar -->
+                                                                        <button class="btn btn-success" @onclick="(()=> Play(_campaign.Id))" data-bs-dismiss="modal">Jogar</button>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de Campanhas -->
+                        <div class="modal fade" id="CampaignCreate" tabindex="-1" aria-labelledby="CampaignCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignCreateLabel">Criação de Campanha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="imageURL">URL da Imagem: </label>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                        <label for="campaignname">Nome da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.Name" id="campaignname" name="campaignname"> <br>
+
+                                        <label for="campaigndate">Data da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionDate" id="campaigndate" name="campaigndate"> <br>
+
+                                        <label for="campaignhour">Horário da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionHour" id="campaignhour" name="campaignhour"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Campaigns">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateCampaign">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de campanha -->
+                        <div class="modal fade" id="CampaignView" tabindex="-1" aria-labelledby="CampaignViewLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignViewLabel">Campanha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CampaignUpdate">Editar</button>
+                                        
+                                        <!-- Botão para Jogar -->
+                                        <button class="btn btn-success" @onclick="(()=> Play(CampaignService.CampaignData.Id))" data-bs-dismiss="modal">Jogar</button>
+                                        
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    @foreach (var _image in images)
+                                                    {
+                                                        @if (_image.CampaignId == CampaignService.CampaignData.Id)
+                                                        {
+                                                            <td><img src="@_image.ImageURL" style="width:125px;height:125px;"></td>
+                                                        }
+                                                    }
+                                                    <th scope="col">Mestre</th>
+                                                    <td style="width: 15%;">@IdForUserName(CampaignService.CampaignData.UserId)</td>
+                                                    <th scope="col" style="width: 10%;">Campanha</th>
+                                                    <td>@IdForCampaignName(CampaignService.CampaignData.Id)</td>
+                                                    <th scope="col">Data da sessão</th>
+                                                    <td>@CampaignService.CampaignData.SessionDate</td>
+                                                    <th scope="col">Horário</th>
+                                                    <td>@CampaignService.CampaignData.SessionHour</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">PARTICIPANTES</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Jogador</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Gênero</th>
+                                                    <th scope="col">Raça</th>
+                                                    <th scope="col">Classe</th>
+                                                    <th scope="col">Nível</th>
+                                                    <th scope="col">Opção</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _character in characters)
+                                                {
+                                                    if (_character.CampaignId == CampaignService.CampaignData.Id)
+                                                    {
+                                                        <tr>
+                                                            @foreach (var _image in images)
+                                                                    {
+                                                                        if (_image.CharacterId == _character.Id)
+                                                                        {
+                                                                            <td><img src="@_image.ImageURL" style="width:50px;height:50px;"></td>
+                                                                        }
+                                                                    }
+                                                            <td  style="width: 15%;">@IdForUserName(_character.UserId)</td>
+                                                            <td  style="width: 15%;">@_character.Name</td>
+                                                            <td  style="width: 15%;">@_character.Gender</td>
+                                                            <td  style="width: 15%;">@_character.Race</td>
+                                                            <td  style="width: 15%;">@_character.Class</td>
+                                                            <td  style="width: 15%;">@_character.Level</td>
+                                                            <td>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterView" @onclick="(() => CharacterService.CharacterSave(_character))">Visualizar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de campanhas -->
+                        <div class="modal fade" id="CampaignUpdate" tabindex="-1" aria-labelledby="CampaignUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignUpdateLabel">Edição de Campanha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.CampaignId == CampaignService.CampaignData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
+                                        <label for="campaignname">Nome da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.Name" id="campaignname" name="campaignname"> <br>
+
+                                        <label for="campaigndate">Data da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionDate" id="campaigndate" name="campaigndate"> <br>
+
+                                        <label for="campaignhour">Horário da Sessão: </label>
+                                        <input type="text" class="form-control" @bind="@CampaignService.CampaignData.SessionHour" id="campaignhour" name="campaignhour"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Campaigns">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateCampaign">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de campanha -->
+                        <div class="modal fade" id="CampaignDelete" tabindex="-1" aria-labelledby="CampaignDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CampaignDeleteLabel">Deletar campanha?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Uma campanha deletada não pode ser restaurada! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Campaigns">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteCampaign(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card dos personagens -->
+                        <div class="card col" style="width: 18rem;">
+                            <a data-bs-toggle="modal" data-bs-target="#Characters">
+                                <img src="/img/characters.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">personagens</h5>
+                                    <p class="card-text">Gerencie seus personagens</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Modal de exibição resumida de personagens -->
+                        <div class="modal fade" id="Characters" tabindex="-1" aria-labelledby="CharactersLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharactersLabel">Personagens</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterCreate" @onclick="ResetCharacterData">Criar personagem</button>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Gênero</th>
+                                                    <th scope="col">Raça</th>
+                                                    <th scope="col">Classe</th>
+                                                    <th scope="col">Nível</th>
+                                                    <th scope="col">Campanha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _character in characters)
+                                                {
+                                                    @if (_character.UserId == UserService.Id)
+                                                    {
+                                                        <tr>
+                                                            @foreach (var _image in images)
+                                                            {
+                                                                @if (_image.CharacterId == _character.Id)
+                                                                {
+                                                                    <td><img src="@_image.ImageURL" style="width:50px;height:50px;"></td>
+                                                                }
+                                                            }
+                                                            <td>@_character.Id</td>
+                                                            <td>@_character.Name</td>
+                                                            <td>@_character.Gender</td>
+                                                            <td>@_character.Race</td>
+                                                            <td>@_character.Class</td>
+                                                            <td>@_character.Level</td>
+                                                            <td>@IdForCampaignName(_character.CampaignId)</td>
+                                                            <td>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterView" @onclick="(() => CharacterService.CharacterSave(_character))">Visualizar</button>
+
+                                                                <!-- Botão de Delete de personagem -->
+                                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CharacterDelete" @onclick="(() => SaveIdForDelete(_character.Id))">Deletar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de personagens -->
+                        <div class="modal fade" id="CharacterCreate" tabindex="-1" aria-labelledby="CharacterCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterCreateLabel">Criação de Personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Identificação do Personagem</h5> <br>
+
+                                        <label for="imageURL">URL da Imagem: </label>
+                                        <input type="text" class="form-control" @bind="@ImageService.ImageData.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                        <label for="charcampaignId">Id da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
+
+                                        <label for="charname">Nome do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Name" id="charname" name="charname"> <br>
+
+                                        <label for="charrace">Raça: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Race" id="charrace" name="charrace"> <br>
+
+                                        <label for="chargender">Gênero: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Gender" id="chargender" name="chargender"> <br>
+
+                                        <label for="charage">Idade: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Age" id="charage" name="charage"> <br>
+
+                                        <label for="charclass">Classe: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Class" id="charclass" name="charclass"> <br>
+
+                                        <label for="chardescription">Descrição do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Description" id="chardescription" name="chardescription"> <br>
+
+                                        <label for="charhistory">História do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.History" id="charhistory" name="charhistory"> <br><br>
+                                        
+                                        
+                                        <h5>Estatísticas do Personagem</h5> <br>
+
+                                        <label for="charlevel">Nível: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Level" id="charlevel" name="charlevel"> <br><br>
+
+                                        <label for="charhealth">Vida: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Health" id="charhealth" name="charhealth"> <br>
+
+                                        <label for="charmana">Mana: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Mana" id="charmana" name="charmana"> <br><br>
+
+                                        <label for="charPD">Defesa Física: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.PD" id="charPD" name="charPD"> <br>
+
+                                        <label for="charMD">Defesa Mágica: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.MD" id="charMD" name="charMD"> <br><br>
+
+                                        <label for="charSTR">STR: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.STR" id="charSTR" name="charSTR"> <br>
+
+                                        <label for="charDEX">DEX: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.DEX" id="charDEX" name="charDEX"> <br>
+
+                                        <label for="charCON">CON: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CON" id="charCON" name="charCON"> <br>
+
+                                        <label for="charINT">INT: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.INT" id="charINT" name="charINT"> <br>
+
+                                        <label for="charWIS">WIS: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIS" id="charWIS" name="charWIS"> <br>
+
+                                        <label for="charCHA">CHA: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CHA" id="charCHA" name="charCHA"> <br>
+
+                                        <label for="charWIL">WIL: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIL" id="charWIL" name="charWIL"> <br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateCharacter">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de personagem -->
+                        <div class="modal fade" id="CharacterView" tabindex="-1" aria-labelledby="CharacterViewLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterViewLabel">Ficha de Personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CharacterUpdate">Editar</button>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Jogador</th>
+                                                    <td style="width: 15%;">@IdForUserName(CharacterService.CharacterData.UserId)</td>
+                                                    <th scope="col" style="width: 10%;">Campanha</th>
+                                                    <td>@IdForCampaignName(CharacterService.CharacterData.CampaignId)</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">IDENTIFICAÇÃO DO PERSONAGEM</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    @foreach (var _image in images)
+                                                    {
+                                                        @if (_image.CharacterId == CharacterService.CharacterData.Id)
+                                                        {
+                                                            <td><img src="@_image.ImageURL" style="width:250px;height:250px;"></td>
+                                                        }
+                                                    }
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Nome</th>
+                                                    <td>@CharacterService.CharacterData.Name</td>
+                                                    <th scope="col">Raça</th>
+                                                    <td>@CharacterService.CharacterData.Race</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Gênero</th>
+                                                    <td>@CharacterService.CharacterData.Gender</td>
+                                                    <th scope="col">Idade</th>
+                                                    <td>@CharacterService.CharacterData.Age</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Classe</th>
+                                                    <td>@CharacterService.CharacterData.Class</td>
+                                                    <th scope="col">Nível</th>
+                                                    <td>@CharacterService.CharacterData.Level</td>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Descrição</th>
+                                                    <td colspan="3" style="text-align: justify;">@CharacterService.CharacterData.Description</td>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">História</th>
+                                                    <td colspan="3" style="text-align: justify;">@CharacterService.CharacterData.History</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">ESTATÍSTICAS</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">HP / MP</th>
+                                                </tr>
+                                                <br>
+                                                <tr>
+                                                    <th scope="col">Vida</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.Health</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Mana</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.Mana</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">RESISTÊNCIAS</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Defesa Física</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.PD</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Defesa Mágica</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.MD</td>
+                                                </tr>
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="2" style="text-align: center;">STATUS</th>
+                                                    <th scope="col" style="text-align: center;">MODIFICADOR</th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Força</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.STR</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.STR)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Destreza</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.DEX</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.DEX)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Constituição</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.CON</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.CON)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Inteligência</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.INT</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.INT)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Sabedoria</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.WIS</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.WIS)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Carisma</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.CHA</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.CHA)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Vontade</th>
+                                                    <td style="text-align: center;">@CharacterService.CharacterData.WIL</td>
+                                                    <td style="text-align: center;">@CheckModifier(CharacterService.CharacterData.WIL)</td>
+                                                </tr>
+                                                <br><br>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">HABILIDADES</th>
+                                                    <td>
+                                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillCreate" @onclick="ResetSkillData">Criar habilidade</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col" colspan="3">Descrição</th>
+                                                </tr>
+                                                    @foreach (var _skill in skills)
+                                                    {
+                                                        if (_skill.CharacterId == CharacterService.CharacterData.Id)
+                                                        {
+                                                            <tr>
+                                                                @foreach (var _image in images)
+                                                                {
+                                                                    if (_image.SkillId == _skill.Id)
+                                                                    {
+                                                                        <td><img src="@_image.ImageURL" style="width:75px;height:75px;"></td>
+                                                                    }
+                                                                }
+                                                                <td>@_skill.Name</td>
+                                                                <td colspan="3" style="text-align: justify;">@_skill.Description</td>
+                                                                <td>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SkillUpdate" @onclick="(() => SkillService.SkillSave(_skill))">Editar</button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#SkillDelete" @onclick="(() => SaveIdForDelete(_skill.Id))">Deletar</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                <br><br>
+                                                <tr>
+                                                    <th scope="col" colspan="4" style="text-align: center;">ITENS</th>
+                                                    <td>
+                                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemCreate" @onclick="ResetItemData">Criar item</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Imagem</th>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col" colspan="3">Descrição</th>
+                                                </tr>
+                                                    @foreach (var _item in itens)
+                                                    {
+                                                        if (_item.CharacterId == CharacterService.CharacterData.Id)
+                                                        {
+                                                            <tr>
+                                                                @foreach (var _image in images)
+                                                                {
+                                                                    if (_image.ItemId == _item.Id)
+                                                                    {
+                                                                        <td><img src="@_image.ImageURL" style="width:75px;height:75px;"></td>
+                                                                    }
+                                                                }
+                                                                <td>@_item.Name</td>
+                                                                <td colspan="3" style="text-align: justify;">@_item.Description</td>
+                                                                <td>
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ItemUpdate" @onclick="(() => ItemService.ItemSave(_item))">Editar</button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ItemDelete" @onclick="(() => SaveIdForDelete(_item.Id))">Deletar</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de personagens -->
+                        <div class="modal fade" id="CharacterUpdate" tabindex="-1" aria-labelledby="CharacterUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterUpdateLabel">Edição de personagem</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Identificação do Personagem</h5> <br>
+
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.CharacterId == CharacterService.CharacterData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
+                                        <label for="charcampaignId">Id da Campanha: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CampaignId" id="charcampaignId" name="charcampaignId"> <br>
+
+                                        <label for="charname">Nome do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Name" id="charname" name="charname"> <br>
+
+                                        <label for="charrace">Raça: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Race" id="charrace" name="charrace"> <br>
+
+                                        <label for="chargender">Gênero: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Gender" id="chargender" name="chargender"> <br>
+
+                                        <label for="charage">Idade: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Age" id="charage" name="charage"> <br>
+
+                                        <label for="charclass">Classe: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Class" id="charclass" name="charclass"> <br>
+
+                                        <label for="chardescription">Descrição do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Description" id="chardescription" name="chardescription"> <br>
+
+                                        <label for="charhistory">História do Personagem: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.History" id="charhistory" name="charhistory"> <br><br>
+                                        
+                                        
+                                        <h5>Estatísticas do Personagem</h5> <br>
+
+                                        <label for="charlevel">Nível: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Level" id="charlevel" name="charlevel"> <br><br>
+
+                                        <label for="charhealth">Vida: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Health" id="charhealth" name="charhealth"> <br>
+
+                                        <label for="charmana">Mana: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.Mana" id="charmana" name="charmana"> <br><br>
+
+                                        <label for="charPD">Defesa Física: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.PD" id="charPD" name="charPD"> <br>
+
+                                        <label for="charMD">Defesa Mágica: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.MD" id="charMD" name="charMD"> <br><br>
+
+                                        <label for="charSTR">STR: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.STR" id="charSTR" name="charSTR"> <br>
+
+                                        <label for="charDEX">DEX: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.DEX" id="charDEX" name="charDEX"> <br>
+
+                                        <label for="charCON">CON: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CON" id="charCON" name="charCON"> <br>
+
+                                        <label for="charINT">INT: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.INT" id="charINT" name="charINT"> <br>
+
+                                        <label for="charWIS">WIS: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIS" id="charWIS" name="charWIS"> <br>
+
+                                        <label for="charCHA">CHA: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.CHA" id="charCHA" name="charCHA"> <br>
+
+                                        <label for="charWIL">WIL: </label>
+                                        <input type="text" class="form-control" @bind="@CharacterService.CharacterData.WIL" id="charWIL" name="charWIL"> <br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateCharacter">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de personagem -->
+                        <div class="modal fade" id="CharacterDelete" tabindex="-1" aria-labelledby="CharacterDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="CharacterDeleteLabel">Deletar personagem?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Um personagem deletado não pode ser restaurado! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Characters">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteCharacter(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de itens -->
+                        <div class="modal fade" id="ItemCreate" tabindex="-1" aria-labelledby="ItemCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemCreateLabel">Criação de Item</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="imageURL">URL da Imagem: </label>
+                                        <input type="text" class="form-control" @bind="newImageURL" id="imageURL" name="imageURL"> <br>
+
+                                        <label for="itemname">Nome do Item: </label>
+                                        <input type="text" class="form-control" @bind="ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
+
+                                        <label for="itemdescription">Descrição do Item: </label>
+                                        <input type="text" class="form-control" @bind="ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateItem">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de itens -->
+                        <div class="modal fade" id="ItemUpdate" tabindex="-1" aria-labelledby="ItemUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemUpdateLabel">Edição de Item</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.ItemId == ItemService.ItemData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="@_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
+                                        <label for="itemname">Nome do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Name" id="itemname" name="itemname"> <br>
+
+                                        <label for="itemdescription">Descrição do Item: </label>
+                                        <input type="text" class="form-control" @bind="@ItemService.ItemData.Description" id="itemdescription" name="itemdescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateItem">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de item -->
+                        <div class="modal fade" id="ItemDelete" tabindex="-1" aria-labelledby="ItemDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="ItemDeleteLabel">Deletar item?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Um item deletado não pode ser restaurado! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteItem(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de criação de skills -->
+                        <div class="modal fade" id="SkillCreate" tabindex="-1" aria-labelledby="SkillCreateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillCreateLabel">Criação de Habilidade</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <label for="imageURL">URL da Imagem: </label>
+                                        <input type="text" class="form-control" @bind="newImageURL" id="imageURL" name="imageURL"> <br>
+
+                                        <label for="skillname">Nome da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+
+                                        <label for="skilldescription">Descrição da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="CreateSkill">Concluir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edição de skills -->
+                        <div class="modal fade" id="SkillUpdate" tabindex="-1" aria-labelledby="SkillUpdateLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillUpdateLabel">Edição de Habilidade</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @foreach (var _image in images)
+                                        {
+                                            if (_image.SkillId == SkillService.SkillData.Id)
+                                            {
+                                                <label for="imageURL">URL da Imagem: </label>
+                                                <input type="text" class="form-control" @bind="_image.ImageURL" id="imageURL" name="imageURL"> <br>
+
+                                                ImageService.ImageSave(_image);
+                                            }
+                                        }
+
+                                        <label for="skillname">Nome da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Name" id="skillname" name="skillname"> <br>
+
+                                        <label for="skilldescription">Descrição da Habilidade: </label>
+                                        <input type="text" class="form-control" @bind="SkillService.SkillData.Description" id="skilldescription" name="skilldescription"> <br><br>
+
+
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="UpdateSkill">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de exibição de confirmação de Delete de skill -->
+                        <div class="modal fade" id="SkillDelete" tabindex="-1" aria-labelledby="SkillDeleteLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="SkillDeleteLabel">Deletar habilidade?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> Uma habilidade deletada não pode ser restaurada! </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CharacterView">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(() => DeleteSkill(IdForDelete))">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card do guia -->
+                        <div class="card col" style="width: 18rem;">
+                            <a href="/RPG Guide/DeskUniverse v0.5.pdf" target="_blank">
+                                <img src="/img/guide.jpg" class="" alt="...">
+                                <div class="card-img-overlay">
+                                    <h5 class="card-title">Guia</h5>
+                                    <p class="card-text">Aprenda como jogar e desenvolver suas campanhas</p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+            
+        }
+        else{Navigation.NavigateTo("/Login");}
+    </body>
+</html>
+
+@code
+{
+    // Variáveis utilizadas para evitar erros ----------------------------------------------------------------------------------------
+    public string newImageURL = ""; 
+    /* Por alguma razão o ImageService.ImageData não está sendo resetado no momento certo, então essa 
+    variável vai servir de armazenamento temporário para os URLs das imagens do CREATE SKILL e CREATE ITEM */
+
+    // Salva todos os dados das tabelas do banco em listas ---------------------------------------------------------------------------
+    public List<User>? users { get; set; } = new List<User>();
+    public List<Campaign>? campaigns { get; set; } = new List<Campaign>();
+    public List<Character>? characters { get; set; } = new List<Character>();
+    public List<Skill>? skills { get; set; } = new List<Skill>();
+    public List<Item>? itens { get; set; } = new List<Item>();
+    public List<Image>? images { get; set; } = new List<Image>();
+    public List<Board>? boards { get; set; } = new List<Board>();
+    public List<Token>? tokens { get; set; } = new List<Token>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ResetCampaignData();
+        ResetCharacterData();
+        ResetSkillData();
+        ResetItemData();
+        users = await Http.GetFromJsonAsync<List<User>?>("user");
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+        skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
+        itens = await Http.GetFromJsonAsync<List<Item>?>("item");
+        images = await Http.GetFromJsonAsync<List<Image>?>("image");
+        boards = await Http.GetFromJsonAsync<List<Board>?>("board");
+        tokens = await Http.GetFromJsonAsync<List<Token>?>("token");
+    }
+
+    // Recebe o ID do usuário e devolve seu nome --------------------------------------------------------------------------------------
+    public string? username;
+    public string IdForUserName(int Id)
+    {
+        username = null;
+        
+        foreach(var _user in users)
+        {
+            if(Id == _user.Id)
+            {
+                username = _user.Username;
+            }
+        }
+
+        return(username);
+    }
+
+    // Recebe o ID da campanha e devolve seu nome -------------------------------------------------------------------------------------
+    public string? campaignname;
+    public string IdForCampaignName(int? Id)
+    {
+        campaignname = null;
+
+        foreach(var _campaign in campaigns)
+        {
+            if(Id == _campaign.Id)
+            {
+                campaignname = _campaign.Name;
+            }
+        }
+
+        return(campaignname);
+
+    }
+
+    //Funções para resetar os dados das variáveis dos serviços-------------------------------------------------------------------------
+    public void ResetCharacterData()
+    {
+        CharacterService.CharacterData = new Character();
+        ImageService.ImageData = new Image();
+        TokenService.TokenData = new Token();
+    }
+
+    public void ResetCampaignData()
+    {
+        CampaignService.CampaignData = new Campaign();
+        ImageService.ImageData = new Image();
+        BoardService.BoardData = new Board();
+    }
+
+    public void ResetItemData()
+    {
+        ItemService.ItemData = new Item();
+        ImageService.ImageData = new Image();
+    }
+
+    public void ResetSkillData()
+    {
+        SkillService.SkillData = new Skill();
+        ImageService.ImageData = new Image();
+    }
+
+    // Funções para realizar a operação de Create (Post) ------------------------------------------------------------------------------
+    public async void CreateCharacter()
+    {
+        CharacterService.CharacterData.UserId = UserService.Id;
+        await Http.PostAsJsonAsync<Character>("character", CharacterService.CharacterData);
+        characters = await Http.GetFromJsonAsync<List<Character>?>("character");
+
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
+        foreach(var _character in characters)
+        {
+            if(_character.UserId == CharacterService.CharacterData.UserId && _character.Name == CharacterService.CharacterData.Name)
+            {
+                ImageService.ImageData.CharacterId = _character.Id;
+                
+                TokenService.TokenData.CharacterId = _character.Id;
+                TokenService.TokenData.CampaignId = _character.CampaignId;
+                TokenService.TokenData.ImageURL = "/img/token.png";
+                TokenService.TokenData.Position = "";
+                TokenService.TokenData.Health = _character.Health;
+                TokenService.TokenData.Mana = _character.Mana;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Token>("token", TokenService.TokenData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateCampaign()
+    {
+        CampaignService.CampaignData.UserId = UserService.Id;
+        await Http.PostAsJsonAsync<Campaign>("campaign", CampaignService.CampaignData);
+        campaigns = await Http.GetFromJsonAsync<List<Campaign>?>("campaign");
+
+        if(ImageService.ImageData.ImageURL == null)
+        {
+            ImageService.ImageData.ImageURL = "";
+        }
+
+        foreach(var _campaign in campaigns)
+        {
+            if(_campaign.UserId == CampaignService.CampaignData.UserId && _campaign.Name == CampaignService.CampaignData.Name)
+            {
+                ImageService.ImageData.CampaignId = _campaign.Id;
+                
+                BoardService.BoardData.CampaignId = _campaign.Id;
+                BoardService.BoardData.Name = _campaign.Name;
+                BoardService.BoardData.BackgroundURL = "";
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+        await Http.PostAsJsonAsync<Board>("board", BoardService.BoardData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateItem()
+    {
+        ItemService.ItemData.CharacterId = CharacterService.CharacterData.Id;
+        await Http.PostAsJsonAsync<Item>("item", ItemService.ItemData);
+        itens = await Http.GetFromJsonAsync<List<Item>?>("item");
+
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
+
+        foreach(var _item in itens)
+        {
+            if(_item.CharacterId == ItemService.ItemData.CharacterId && _item.Name == ItemService.ItemData.Name)
+            {
+                ImageService.ImageData.ItemId = _item.Id;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+
+        newImageURL = "";
+
+        Navigation.NavigateTo("/");
+    }
+
+    public async void CreateSkill()
+    {
+        SkillService.SkillData.CharacterId = CharacterService.CharacterData.Id;
+        await Http.PostAsJsonAsync<Skill>("skill", SkillService.SkillData);
+        skills = await Http.GetFromJsonAsync<List<Skill>?>("skill");
+        
+        ImageService.ImageData.Id = 0;
+        ImageService.ImageData.ImageURL = newImageURL;
+        ImageService.ImageData.UserId = null;
+        ImageService.ImageData.CampaignId = null;
+        ImageService.ImageData.CharacterId = null;
+        ImageService.ImageData.SkillId = null;
+        ImageService.ImageData.ItemId = null;
+
+        foreach(var _skill in skills)
+        {
+            if(_skill.CharacterId == SkillService.SkillData.CharacterId && _skill.Name == SkillService.SkillData.Name)
+            {
+                ImageService.ImageData.SkillId = _skill.Id;
+            }
+        }
+        await Http.PostAsJsonAsync<Image>("image", ImageService.ImageData);
+
+        newImageURL = "";
+
+        Navigation.NavigateTo("/");
+    }
+
+    // Funções para realizar a operação de Update (Put) -------------------------------------------------------------------------------
+    public void UpdateCharacter()
+    {
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+                TokenService.TokenData.CampaignId = CharacterService.CharacterData.CampaignId;
+            }
+        }
+
+        Http.PutAsJsonAsync<Character>($"character/{CharacterService.CharacterData.Id}", CharacterService.CharacterData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Http.PutAsJsonAsync<Token>($"token/{TokenService.TokenData.Id}", TokenService.TokenData);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateCampaign()
+    {
+        Http.PutAsJsonAsync<Campaign>($"campaign/{CampaignService.CampaignData.Id}", CampaignService.CampaignData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateItem()
+    {
+        Http.PutAsJsonAsync<Item>($"item/{ItemService.ItemData.Id}", ItemService.ItemData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    public void UpdateSkill()
+    {
+        Http.PutAsJsonAsync<Skill>($"skill/{SkillService.SkillData.Id}", SkillService.SkillData);
+        Http.PutAsJsonAsync<Image>($"image/{ImageService.ImageData.Id}", ImageService.ImageData);
+        Navigation.NavigateTo("/");
+    }
+
+    // Funções para realizar a operação de Delete -------------------------------------------------------------------------------------
+    public int IdForDelete;
+
+    public void SaveIdForDelete(int id)
+    {
+        IdForDelete = id;
+    }
+    
+    public void DeleteCharacter(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"character/{id}");
+
+        foreach (var _image in images)
+        {
+            if(_image.CharacterId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        foreach (var _item in itens)
+        {
+            if(_item.CharacterId == id)
+            {
+                DeleteItem(_item.Id);
+            }
+        }
+
+        foreach (var _skill in skills)
+        {
+            if(_skill.CharacterId == id)
+            {
+                DeleteSkill(_skill.Id);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if(_token.CharacterId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"token/{_token.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteCampaign(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"campaign/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.CampaignId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        foreach (var _board in boards)
+        {
+            if(_board.CampaignId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"board/{_board.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteItem(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"item/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.ItemId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    public void DeleteSkill(int id)
+    {
+        Http.DeleteFromJsonAsync<int>($"skill/{id}");
+        
+        foreach (var _image in images)
+        {
+            if(_image.SkillId == id)
+            {
+                Http.DeleteFromJsonAsync<int>($"image/{_image.Id}");
+            }
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    // Verifica o valor do modificador do status do personagem ------------------------------------------------------------------------
+    public double modifier = 0;
+    public int modCounter = 0;
+    public string modifierText;
+
+    public string CheckModifier(int? status)
+    {
+        modifier = 0;
+        modCounter = 0;
+
+        while (status >= modCounter)
+        {
+            modifier = (modCounter / 2) - 5;
+            modifier = Math.Round(modifier);
+            modCounter = modCounter + 1;
+        }
+
+        if (modifier >= 0)
+        {
+            modifierText = $"+{modifier}";
+        }
+        else
+        {
+            modifierText = $"{modifier}";
+        }
+
+        return(modifierText);
+    }
+
+    // Abre o tabuleiro da campanha -------------------------------------------------------------------------------------------------
+    public void Play(int id)
+    {
+        foreach (var _campaign in campaigns)
+        {
+            if (_campaign.Id == id)
+            {
+                CampaignService.CampaignSave(_campaign);
+            }
+        }
+
+        foreach (var _character in characters)
+        {
+            if (_character.CampaignId == id && _character.UserId == UserService.Id)
+            {
+                CharacterService.CharacterSave(_character);
+            }
+        }
+
+        foreach (var _token in tokens)
+        {
+            if (_token.CharacterId == CharacterService.CharacterData.Id)
+            {
+                TokenService.TokenSave(_token);
+            }
+        }
+
+        foreach (var _board in boards)
+        {
+            if (_board.CampaignId == id)
+            {
+                BoardService.BoardSave(_board);
+                
+                BoardService.Playing = true;
+
+                Navigation.NavigateTo("/Play");
+            }
+        }
+    }
+}
