@@ -198,13 +198,13 @@
       "mscorlib.dll": "sha256-pO\/W4w\/X+UjVMUMaxE5tYTQ0tILP+hmMu0zi0MSVBLc=",
       "netstandard.dll": "sha256-kj5cBXzwPYC+HD+P8+6VybY34JtEzjXjMIHXEI3hIiM=",
       "System.Private.CoreLib.dll": "sha256-Awk1lCiFfH7r9AAZfBtGqS8rhv6UJ5lUu3yF6HDH3tQ=",
-      "DeskUniverse-Frontend.dll": "sha256-0cJSppyAvUcfm0DvknPLgchYjl5Eis5xwcD95jrwSV0="
+      "DeskUniverse-Frontend.dll": "sha256-CvWoCEf6fpeqer4+eEPK4E\/iP5n4\/KAQVMcvp+IezQ4="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "DeskUniverse-Frontend.pdb": "sha256-NCn9JowtRgSN31braVa5JmH6MCscbdi2darsC\/phlCU="
+      "DeskUniverse-Frontend.pdb": "sha256-vc+JwYGJV\/6brfYOGwu3050raWaaL1UTISBv1DKYLso="
     },
     "runtime": {
       "dotnet.7.0.0.ov73f4czzs.js": "sha256-2jNLve8W0sST0LAebgAc1IwSnGhkbjOKO8QPWWiJssI=",

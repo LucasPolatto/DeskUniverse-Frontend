@@ -390,3 +390,7 @@ input::placeholder {
 .Janela-Personagem b{
     margin-right: 1rem;
 }
+
+.modal-backdrop {
+    display: none;
+}

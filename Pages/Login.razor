@@ -9,6 +9,11 @@
     <head>
         <style>
             p {color: red;}
+
+            .login{
+                display: flex;
+                justify-content: center;
+            }
         </style>
     </head>
     <body>
@@ -16,7 +21,7 @@
             <div class="container">
             <div class="row">
                 <div class="login">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card" style="width: 18rem; border: none;">
                         @if (msgInvalido == true)
                         {
                             <p>Usuário ou senha incorreta</p>
@@ -26,7 +31,7 @@
                         <input type="text" class="form-control" @bind="username" id="Username" name="Username"> <br>
 
                         <label for="Password">Senha: </label>
-                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> <br><br>
+                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> <br>
 
                         <button type="button" class="btn btn-primary" @onclick="ValidarLogin">Logar</button>
                     </div>
@@ -59,10 +64,10 @@
     {
         foreach (var _user in users)
         {
-            if(_user.Username == username && _user.Password == password)
+            if(_user.Username == username.ToUpper() && _user.Password == password)
             {
                 UserService.Id = _user.Id;
-                UserService.Username = username;
+                UserService.Username = username.ToUpper();
                 UserService.Password = password;
                 UserService.Logado = true;
                 Navigation.NavigateTo("/Home");

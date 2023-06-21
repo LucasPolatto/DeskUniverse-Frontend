@@ -9,8 +9,8 @@
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\RPG Guide\\DeskUniverse v0.5.pdf",
-      "PackagePath": "staticwebassets\\RPG Guide\\DeskUniverse v0.5.pdf"
+      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\RPG_Guide\\DeskUniverse_v0.5.pdf",
+      "PackagePath": "staticwebassets\\RPG_Guide\\DeskUniverse_v0.5.pdf"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
@@ -71,18 +71,6 @@
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\icon-192.png",
       "PackagePath": "staticwebassets\\icon-192.png"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\campaigns.jpg",
-      "PackagePath": "staticwebassets\\img\\campaigns.jpg"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\characters.jpg",
-      "PackagePath": "staticwebassets\\img\\characters.jpg"
-    },
-    {
-      "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\fundo1.jpg",
-      "PackagePath": "staticwebassets\\img\\fundo1.jpg"
     },
     {
       "Id": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\guide.jpg",

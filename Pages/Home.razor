@@ -20,17 +20,45 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+        
+
         textarea {
             text-align: justify;
             white-space: pre-line;
             width: 100%;
         }
+        .HOME{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+        }
+        #app{
+            width: 100%;
+        }
+        html{
+            width: 100%;
+        }
+        .Janela-Campanha-Participantes div{
+    display: flex!important;
+    align-items: center!important;
+}
+.Janela-Campanha-Dono div{
+    display: flex!important;    
+    align-items: center!important;
+}
+.Janela-Criacao-Personagem-Form div label{
+    font-weight: bold;
+}
     </style>
     
 </head>
 
-
-<body>
     @if (UserService.Logado == true)
     {
         <section class="HOME">
@@ -47,8 +75,8 @@
                             <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
                         </div>
                         <div class="Janela-Exclusao">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal">Cancelar</button>
-                            <button type="button" class="btn btn-danger" @onclick="(() => DeleteCampaign(IdForDelete))">Excluir</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteCampaign(IdForDelete))">Excluir</button>
                         </div>
                     </div>
                 </div>
@@ -68,8 +96,8 @@
                             <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
                         </div>
                         <div class="Janela-Exclusao">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal">Cancelar</button>
-                            <button type="button" class="btn btn-danger" @onclick="(() => DeleteCharacter(IdForDelete))">Excluir</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteCharacter(IdForDelete))">Excluir</button>
                         </div>
                     </div>
                 </div>
@@ -89,8 +117,8 @@
                             <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
                         </div>
                         <div class="Janela-Exclusao">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal">Cancelar</button>
-                            <button type="button" class="btn btn-danger" @onclick="(() => DeleteSkill(IdForDelete))">Excluir</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteSkill(IdForDelete))">Excluir</button>
                         </div>
                     </div>
                 </div>
@@ -110,8 +138,8 @@
                             <h5>Tem certeza que deseja prosseguir com a exclusão de ?</h5>
                         </div>
                         <div class="Janela-Exclusao">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">Cancelar</button>
-                            <button type="button" class="btn btn-danger" @onclick="(() => DeleteItem(IdForDelete))">Excluir</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="(() => DeleteItem(IdForDelete))">Excluir</button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +152,9 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content Janela-Personagem">
                         <div class="modal-body">
-
+                            <div style="width:100%; display:flex; justify-content: flex-end;">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
                             <div class="Janela-Personagem-Ficha-Title">
                                 <h2 class="Janela-Titulo Nordic">Ficha do personagem</h2>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -292,7 +322,7 @@
                         </div>
                         <div class="Janela-Personagem-Items">
                             <div class="container">
-                                <table class="w-100">
+                                <table class="w-100" style="margin-bottom:3rem;">
                                     <tr>
                                         <th style="width:10%">Imagem</th>
                                         <th style="width:35%">Nome</th>
@@ -325,6 +355,7 @@
                                     }
                                         
                                 </table>
+                                
                             </div>
                         </div>
                     </div>
@@ -470,9 +501,9 @@
 
                                 <div class="Janela-Criacao-Personagem-Form-Btns row">
                                     <button type="button" class="btn btn-danger col-2" 
-                                        data-bs-toggle="modal">Cancelar</button>
+                                        data-bs-dismiss="modal">Cancelar</button>
                                     <button type="button" class="btn btn-success col-2" 
-                                        @onclick="UpdateCharacter">Salvar</button>
+                                        data-bs-dismiss="modal" @onclick="UpdateCharacter">Salvar</button>
                                 </div>
 
 
@@ -613,8 +644,8 @@
 
                                 <div class="Janela-Criacao-Personagem-Form-Btns row">
                                     <button type="button" class="btn btn-danger col-2" 
-                                        data-bs-toggle="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-success col-2" @onclick="CreateCharacter">Criar</button>
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="CreateCharacter">Criar</button>
                                 </div>
 
 
@@ -650,8 +681,8 @@
                                         <textarea placeholder="Descrição da habilidade" @bind="SkillService.SkillData.Description"></textarea>
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="CreateSkill">Criar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="CreateSkill">Criar</button>
                                     </div>
 
                                 </form>
@@ -698,8 +729,8 @@
                                         <textarea @bind="SkillService.SkillData.Description"></textarea>
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="UpdateSkill">Salvar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="UpdateSkill">Salvar</button>
                                     </div>
 
                                 </form>
@@ -737,8 +768,8 @@
                                         <textarea placeholder="Descrição do item" @bind="ItemService.ItemData.Description"></textarea>
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="CreateItem">Criar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="CreateItem">Criar</button>
                                     </div>
 
                                 </form>
@@ -780,8 +811,8 @@
                                         <textarea @bind="ItemService.ItemData.Description"></textarea>
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="UpdateItem">Salvar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="UpdateItem">Salvar</button>
                                     </div>
 
                                 </form>
@@ -819,8 +850,8 @@
                                         <input type="text" placeholder="Horário" @bind="CampaignService.CampaignData.SessionHour">
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="CreateCampaign">Criar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="CreateCampaign">Criar</button>
                                     </div>
 
                                 </form>
@@ -866,8 +897,8 @@
                                         <input type="text" @bind="CampaignService.CampaignData.SessionHour">
                                     </div>
                                     <div class="Janela-Criacao-Habilidade-Form-Btns row">
-                                        <button type="button" class="btn btn-danger col-2" data-bs-toggle="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success col-2" @onclick="UpdateCampaign">Salvar</button>
+                                        <button type="button" class="btn btn-danger col-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success col-2" data-bs-dismiss="modal" @onclick="UpdateCampaign">Salvar</button>
                                     </div>
 
                                 </form>
@@ -883,6 +914,9 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-body Janela-Campanha-Visualizar-Title">
+                            <div style="width:100%; display:flex; justify-content: flex-end;">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
                             <div class="row Janela-Campanha-Visualizar">
                                 <div class="col-4">
                                     <h2 class="Nordic">Campanha:</h2>
@@ -891,7 +925,7 @@
                                 <div class="col-4">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal9">Editar</button>
-                                    <button type="button" class="btn btn-success" @onclick="(()=> Play(CampaignService.CampaignData.Id))">Jogar</button>
+                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" @onclick="(()=> Play(CampaignService.CampaignData.Id))">Jogar</button>
                                 </div>
                             </div>
                             <div class="row Janela-Campanha-Title">
@@ -901,7 +935,7 @@
                                 <div class="col-2">Data</div>
                                 <div class="col-2">Horario</div>
                             </div>
-                            <div class="row">
+                            <div class="row Janela-Campanha-Dono">
                                 @foreach (var _image in images)
                                 {
                                     if (_image.CampaignId == CampaignService.CampaignData.Id)
@@ -923,7 +957,7 @@
                                 <div class="col-2">Jogador</div>
                                 <div class="col-2"></div>
                             </div>
-                            <div class="row">
+                            <div class="row Janela-Campanha-Participantes">
                                 @foreach (var _character in characters)
                                 {
                                     if (_character.CampaignId == CampaignService.CampaignData.Id)
@@ -957,9 +991,11 @@
 
             <!-- CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - CAMPANHA - -->
             <!-- BTN MODAL CAMPANHA -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCampanha">
-                Campanha
-            </button>
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCampanha">
+                    Campanha
+                </button>
+            </div>
             <!-- MODAL CAMPANHA -->
             <div class="modal fade" id="exampleModalCampanha" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabelCampanha" aria-hidden="true" data-bs-backdrop="static">
@@ -967,6 +1003,9 @@
                     <div class="modal-content">
 
                         <div class="modal-body">
+                            <div style="width:100%; display:flex; justify-content: flex-end;">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
                             <h2 class="Janela-Titulo Nordic">Campanhas</h2>
 
                             <div class="Janela-Campanha">
@@ -1038,7 +1077,13 @@
                                             if (_character.CampaignId == _campaign.Id)
                                             {
                                                 <div class="row">
-                                                    <div class="col-1">Imagem teste</div>
+                                                    @foreach (var _image in images)
+                                                    {
+                                                        if (_image.CampaignId == _character.CampaignId)
+                                                        {
+                                                            <div class="col-1"><img style="width: 100%" src="@_image.ImageURL"></div>
+                                                        }
+                                                    }
                                                     <div class="col-1">@_campaign.Id</div>
                                                     <div class="col-2">@IdForUserName(_campaign.UserId)</div>
                                                     <div class="col-2">@_campaign.Name</div>
@@ -1046,8 +1091,8 @@
                                                     <div class="col-1">@_campaign.SessionDate</div>
                                                     <div class="col-1">@_campaign.SessionHour</div>
                                                     <div class="col-2">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-dismiss="modal"
-                                                            @onclick="(()=> Play(_campaign.Id))">Jogar</button>
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                            data-bs-dismiss="modal" @onclick="(()=> Play(_campaign.Id))">Jogar</button>
                                                     </div>
                                                 </div>
                                             }
@@ -1056,10 +1101,6 @@
                                 }
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </div>
             </div>
@@ -1067,15 +1108,21 @@
             <!--PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM - PERSONAGEM --->
 
             <!-- BTN PERSONAGEM-->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPersonagem">
-                Personagem
-            </button>
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPersonagem">
+                    Personagem
+                </button>
+            </div>
+            
             <!-- MODAL PERSONAGEM-->
             <div class="modal fade" id="exampleModalPersonagem" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabelPersonagem" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
+                            <div style="width:100%; display:flex; justify-content: flex-end;">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
                             <div class="Janela-Modal-Personagem">
                                 <h2 class="Nordic">Personagem</h2>
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal"
@@ -1122,13 +1169,14 @@
             </div>
 
             <!-- BTN GUIA-->
-            <button type="button" class="btn btn-primary" href="/RPG Guide/DeskUniverse v0.5.pdf" target="_blank">
-                Guia
-            </button>
+            <div>
+                <a class="btn btn-primary" href="/RPG_Guide/DeskUniverse_v0.5.pdf" target="_blank">
+                    Guia
+                </a>
+            </div>
         </section>
     }
     else{Navigation.NavigateTo("/Login");}
-</body>
 
 </html>
 
@@ -1239,6 +1287,14 @@
             ImageService.ImageData.ImageURL = "";
         }
 
+        // Variável que define uma imagem padrão para o token de personagem que foram criados sem imagem
+        string defaultTokenURL = "/img/token.png";
+
+        if(ImageService.ImageData.ImageURL != "")
+        {
+            defaultTokenURL = ImageService.ImageData.ImageURL;
+        }
+
         foreach(var _character in characters)
         {
             if(_character.UserId == CharacterService.CharacterData.UserId && _character.Name == CharacterService.CharacterData.Name)
@@ -1247,7 +1303,7 @@
                 
                 TokenService.TokenData.CharacterId = _character.Id;
                 TokenService.TokenData.CampaignId = _character.CampaignId;
-                TokenService.TokenData.ImageURL = "/img/token.png";
+                TokenService.TokenData.ImageURL = defaultTokenURL;
                 TokenService.TokenData.Position = "";
                 TokenService.TokenData.Health = _character.Health;
                 TokenService.TokenData.Mana = _character.Mana;

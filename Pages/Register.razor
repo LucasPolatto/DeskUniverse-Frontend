@@ -8,6 +8,11 @@
     <head>
         <style>
             p {color: red;}
+
+            .register{
+                display: flex;
+                justify-content: center;
+            }
         </style>
     </head>
     <body>
@@ -15,7 +20,7 @@
             <div class="container">
             <div class="row">
                 <div class="register">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card" style="width: 18rem;border: none;">
                         @if (msgUserAR == true)
                         {
                             <p>Usuário já registrado</p>
@@ -30,14 +35,14 @@
                         }
 
                         <label for="Username">Nome de Usuário: </label>
-                        <input type="text" class="form-control" @bind="username" id="Username" name="Username"> <br>
-
+                        <input type="text" class="form-control" @bind="username" id="Username" name="Username"> 
+                        <br>
                         <label for="Password">Senha: </label>
-                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> <br><br>
-
+                        <input type="password" class="form-control" @bind="password" id="Password" name="Password"> 
+                        <br>
                         <label for="confirmPassword">Confirmar Senha: </label>
-                        <input type="password" class="form-control" @bind="confirmPassword" id="confirmPassword" name="confirmPassword"> <br><br>
-
+                        <input type="password" class="form-control" @bind="confirmPassword" id="confirmPassword" name="confirmPassword"> 
+                        <br>
                         <button type="button" class="btn btn-primary" @onclick="ValidarRegistro">Registrar-se</button>
                     </div>
                 </div>
@@ -86,10 +91,10 @@
 
                 if(msgPasswordsNM == false)
                 {
-                    newUser.Username = username;
+                    newUser.Username = username.ToUpper();
                     newUser.Password = password;
                     Http.PostAsJsonAsync<User>("user", newUser);
-                    Navigation.NavigateTo("/Login");
+                    Navigation.NavigateTo("/");
                 }
             }
         }

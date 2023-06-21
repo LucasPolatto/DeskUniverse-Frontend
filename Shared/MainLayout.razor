@@ -11,26 +11,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            height: 100vh;
+            width: 100%;
+        }
+        .table>:not(caption)>*>*{
+            background-color: transparent!important;
+        }
+
+        .body {
+            height: 100%;
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar {
+            position: absolute;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <nav class="navbar">
-        <div class="container-fluid">
-            <div>
-                <a href="" class="navbar-brand">DeskUniverse</a>
-            </div>
-            <div>
-                @if (UserService.Logado == true)
-                {
-                    <a class="navbar-brand" style="color:white;">@UserService.Username</a>
-                    <a class="navbar-brand" style="color:red;" @onclick="LogOut">Logout <i class="bi bi-door-closed"></i></a>   
-                }
-                else
-                {
-                    <a href="/Login" class="navbar-brand" style="color:white;">Entrar <i class="bi bi-door-open"></i></a>
-                    <a href="/Register" class="navbar-brand" style="color:white;">Registrar-se <i class="bi bi-journal-arrow-up"></i></a>
-                }
-            </div>
+        <div>
+            <a href="" class="navbar-brand">DeskUniverse</a>
+        </div>
+        <div>
+            @if (UserService.Logado == true)
+
+            {
+                <a class="navbar-brand" style="color:blue;">@UserService.Username</a>
+                <a class="navbar-brand" style="color:red; cursor:pointer" @onclick="LogOut">Logout <i
+                        class="bi bi-door-closed"></i></a>
+            }
+
+            else
+
+            {
+                <a href="/Login" class="navbar-brand" style="color:green;">Entrar <i class="bi bi-door-open"></i></a>
+                <a href="/Register" class="navbar-brand" style="color:blue;">Registrar-se <i
+                        class="bi bi-journal-arrow-up"></i></a>
+            }
         </div>
     </nav>
     @Body
@@ -39,11 +65,16 @@
 </html>
 
 @code
+
 {
     public void LogOut()
+
     {
+
         UserService.LogOut();
+
         Navigation.NavigateTo("/Login");
+
     }
 
 }

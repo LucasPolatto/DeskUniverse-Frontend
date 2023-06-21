@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "9M1aPcwBcdWYehFoT0eXYMN++o2IfV8VHaAXZ4uW2aA=",
+  "Hash": "tob/TO6KNZcjmh1zXSFdWxinbCkErzr9J5+82/vLXP4=",
   "Source": "DeskUniverse-Frontend",
   "BasePath": "/",
   "Mode": "Root",
@@ -7123,57 +7123,6 @@
       "OriginalItemSpec": "wwwroot\\icon-192.png"
     },
     {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\campaigns.jpg",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "img/campaigns.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\campaigns.jpg"
-    },
-    {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\characters.jpg",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "img/characters.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\characters.jpg"
-    },
-    {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\fundo1.jpg",
-      "SourceId": "DeskUniverse-Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "img/fundo1.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\fundo1.jpg"
-    },
-    {
       "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\img\\guide.jpg",
       "SourceId": "DeskUniverse-Frontend",
       "SourceType": "Discovered",
@@ -7242,12 +7191,12 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\RPG Guide\\DeskUniverse v0.5.pdf",
+      "Identity": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\RPG_Guide\\DeskUniverse_v0.5.pdf",
       "SourceId": "DeskUniverse-Frontend",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\lucas\\OneDrive\\Documentos\\GitHub\\DeskUniverse-Frontend\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "RPG Guide/DeskUniverse v0.5.pdf",
+      "RelativePath": "RPG_Guide/DeskUniverse_v0.5.pdf",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -7256,7 +7205,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\RPG Guide\\DeskUniverse v0.5.pdf"
+      "OriginalItemSpec": "wwwroot\\RPG_Guide\\DeskUniverse_v0.5.pdf"
     }
   ]
 }
